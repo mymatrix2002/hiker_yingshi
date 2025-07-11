@@ -1,7 +1,7 @@
 const csdown = {
     d: [],
     author: '流苏',
-    version: '20250628',
+    version: '20250711',
     rely: (data) => {
         return data.match(/\{([\s\S]*)\}/)[0].replace(/\{([\s\S]*)\}/, '$1')
     },
@@ -83,7 +83,7 @@ const csdown = {
         }
         if (!getMyVar('host', '')) {
             let appurl = fetch('https://cdn-tupic-duofun-neimenggu.56uxi.com/2.txt');
-            putMyVar('host', appurl)
+            putMyVar('host', appurl + '/')
         }
 
         function Cate(list, n, d, col, longclick) {
@@ -395,6 +395,11 @@ const csdown = {
                 "““声明””:本小程序完全免费,别被骗了",
                 "““声明””:随时可能跑路",
                 "““声明””:不要相信里面的广告，不要去加里面的群",
+            ]
+        }, {
+            title: "2025/07/11",
+            records: [
+                "““修复””：修复页面无内容",
             ]
         }, {
             title: "2025/06/28",
