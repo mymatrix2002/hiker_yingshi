@@ -1,7 +1,7 @@
 const csdown = {
     d: [],
     author: '流苏',
-    version: '20250711',
+    version: '20250718',
     rely: (data) => {
         return data.match(/\{([\s\S]*)\}/)[0].replace(/\{([\s\S]*)\}/, '$1')
     },
@@ -82,7 +82,7 @@ const csdown = {
             return '‘‘’’<strong><font color=#' + (c || '000000') + '>' + d + '</font></strong>';
         }
         if (!getMyVar('host', '')) {
-            let appurl = fetch('https://cdn-tupic-duofun-neimenggu.56uxi.com/2.txt');
+            let appurl = fetch('https://omofun.lol/coffee.txt');
             putMyVar('host', appurl + '/')
         }
 
@@ -124,7 +124,7 @@ const csdown = {
             })
             return d;
         }
-        const de_key = 'qwertyuiopqwertt';
+        const de_key = 'qwertyuiopqwertm';
         // 解密函数
         function Decrypt(word) {
             const key = CryptoJS.enc.Utf8.parse(de_key);
@@ -395,6 +395,11 @@ const csdown = {
                 "““声明””:本小程序完全免费,别被骗了",
                 "““声明””:随时可能跑路",
                 "““声明””:不要相信里面的广告，不要去加里面的群",
+            ]
+        }, {
+            title: "2025/07/18",
+            records: [
+                "““更新””：更新至APP最新版，修复内容失效",
             ]
         }, {
             title: "2025/07/11",
