@@ -492,7 +492,7 @@ const csdown = {
                     desc: '0'
                 })
                 */
-                if (!storage0.getItem('type_id_')) {
+                if (!storage0.getMyVar('type_id_')) {
                     let type_id_ = []
                     storage0.getMyVar('init_data').type_list.slice(1).forEach(data => {
                         type_id_.push({
@@ -502,7 +502,7 @@ const csdown = {
                             filter_type_list: data.filter_type_list,
                         })
                     })
-                    storage0.setItem('type_id_', type_id_)
+                    storage0.putMyVar('type_id_', type_id_)
                 }
                 storage0.getMyVar('init_data').type_list.slice(1).forEach(data => {
                     if (data.recommend_list.toString() != []) {
@@ -925,7 +925,7 @@ const csdown = {
                         backgroundColor: getMyVar('search', '0') == '0' ? "#20FA7298" : "",
                     }
                 })
-                storage0.getItem('type_id_').forEach((data, index) => {
+                storage0.getMyVar('type_id_').forEach((data, index) => {
                     if (!/QQ|群/.test(data.list)) {
                         d.push({
                             title: getMyVar('search', '0') == data.id ? strong(data.list, 'FF6699') : data.list,
@@ -982,7 +982,7 @@ const csdown = {
                         })
                         if (getMyVar('flod_', '0') == '1') {
                             let flod = [];
-                            storage0.getItem('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
+                            storage0.getMyVar('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
                                 let name = data.name;
                                 putMyVar('cate_index_' + name + getMyVar('type_list_index', '0'), data.list[0])
                                 data.list.forEach(data => {
@@ -1018,9 +1018,9 @@ const csdown = {
                         id: 'flod_1'
                     }
                 })
-                let cete_index_type = storage0.getItem('type_id_')[0].id;
+                let cete_index_type = storage0.getMyVar('type_id_')[0].id;
                 putMyVar('cate_index_type', cete_index_type);
-                storage0.getItem('type_id_').forEach((data, index_1) => {
+                storage0.getMyVar('type_id_').forEach((data, index_1) => {
                     if (!/QQ|群/.test(data.list)) {
                         d.push({
                             title: getMyVar('type_list_type', getMyVar('cate_index_type')) == data.id ? strong(data.list, 'FF6699') : data.list,
@@ -1044,7 +1044,7 @@ const csdown = {
                     }
                 })
                 if (getMyVar('flod_', '0') == '1') {
-                    storage0.getItem('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
+                    storage0.getMyVar('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
                         let name = data.name;
                         putMyVar('cate_index_' + name + getMyVar('type_list_index', '0'), data.list[0])
                         data.list.forEach(data => {
@@ -1116,7 +1116,7 @@ const csdown = {
                         backgroundColor: getMyVar('rank', '0') == '0' ? "#20FA7298" : "",
                     }
                 })
-                storage0.getItem('type_id_').forEach((data, index) => {
+                storage0.getMyVar('type_id_').forEach((data, index) => {
                     if (!/QQ|群/.test(data.list)) {
                         d.push({
                             title: getMyVar('rank', '0') == data.id ? strong(data.list, 'FF6699') : data.list,
