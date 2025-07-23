@@ -1,15 +1,23 @@
 const csdown = {
     d: [],
     author: '流苏',
-    version: '20250718',
-    rely: (data) => {
+    version: '20250723',
+    rely: function(data) {
         return data.match(/\{([\s\S]*)\}/)[0].replace(/\{([\s\S]*)\}/, '$1')
     },
-    home: () => {
-        var d = csdown.d;
-        if (!getItem('up' + csdown.version, '')) {
-            csdown.update()
-            setItem('up' + csdown.version, '1')
+    home: function() {
+        var d = this.d;
+        confirm({
+            title: '更新',
+            content: '是否导入剧圈小程序？',
+            confirm: $.toString(() => {
+                return parsePaste('云6oooole/xxxxxx/ihrnuabo4vx8l2cm@XveEVl')
+            }),
+            cancel: $.toString(() => {})
+        })
+        if (!getItem('up' + this.version, '')) {
+            this.update()
+            setItem('up' + this.version, '1')
         }
         if (MY_PAGE == 1) {
             d.push({   
@@ -33,7 +41,7 @@ const csdown = {
         }];
 
         if (MY_PAGE == 1) {
-            eval(csdown.rely(csdown.aes));
+            eval(this.rely(this.aes));
             let longclick = [{
                 title: '更新日志',
                 js: $.toString(() => {
@@ -51,15 +59,15 @@ const csdown = {
         }
 
         var 分类 = getMyVar('首页', '1');
-        if (MY_RULE.author == csdown.author || MY_NAME == '嗅觉浏览器') {
+        if (MY_RULE.author == this.author || MY_NAME == '嗅觉浏览器') {
             if (分类 == 1) {
-                csdown.video()
+                this.video()
             } else if (分类 == 2) {
-                csdown.cate()
+                this.cate()
             } else if (分类 == 3) {
-                csdown.rank()
+                this.rank()
             } else if (分类 == 4) {
-                csdown.week()
+                this.week()
             }
         } else {
             d.push({
@@ -375,7 +383,7 @@ const csdown = {
             }, obj, id))
         }
     }),
-    update: () => {
+    update: function() {
         if (getMyVar('github_url') == '') {
             for (let item of storage0.getItem('githubapi')) {
                 let data = JSON.parse(fetch(item, {
@@ -395,6 +403,11 @@ const csdown = {
                 "““声明””:本小程序完全免费,别被骗了",
                 "““声明””:随时可能跑路",
                 "““声明””:不要相信里面的广告，不要去加里面的群",
+            ]
+        }, {
+            title: "2025/07/23",
+            records: [
+                "““更新””：coffee4K可能已失效，换成剧圈APP了，以后如果复活可能继续更新",
             ]
         }, {
             title: "2025/07/18",
@@ -466,9 +479,9 @@ const csdown = {
             ]
         }]);
     },
-    video: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    video: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
@@ -564,9 +577,9 @@ const csdown = {
             log(e.message)
         }
     },
-    videoerji: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    videoerji: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         addListener('onClose', $.toString(() => {
             clearMyVar('vodDetail');
             clearMyVar('info')
@@ -619,77 +632,7 @@ const csdown = {
             d.push({
                 title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
                 url: $('#noLoading#').lazyRule(() => {
-                    putMyVar('shsort', getMyVar('shsort') == '1' ? '0' : '1')
-                    try {
-                        let urls = storage0.getMyVar('vodDetail').vod_play_list[+getMyVar('info', '0')].urls;
-                        if (getMyVar('shsort', '0') == '1') {
-                            urls.reverse()
-                        }
-                        updateItem('排序', {
-                            title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
-                        })
-                        let line = urls.map(data => {
-                            return {
-                                title: data.name,
-                                url: $().lazyRule((url, parse_api_url, token, from) => {
-                                    eval($.require("csdown").rely($.require("csdown").aes));
-                                    if (/\.m3u8|\.mp4|\.mkv/.test(url) || from == 'GBDmp4' || from == 'GNKM' && from != 'ATQP1') {
-                                        return url + '#isVideo=true#';
-                                    }
-                                    if (/\.m4a|\.mp3/.test(url)) {
-                                        return url + '#isMusic=true#';
-                                    }
-                                    try {
-                                        if (/url=/.test(parse_api_url)) {
-                                            let qq = JSON.parse(fetch(parse_api_url)).url;
-                                            if (qq.includes('nby') && qq.includes('mp4')) {
-                                                let nby = JSON.parse(fetch(qq, {
-                                                    headers: {},
-                                                    method: 'GET',
-                                                    onlyHeaders: true
-                                                }))
-                                                return nby.url + '#isVideo=true#';
-                                            }
-                                            return qq + '#isVideo=true#';
-                                        }
-                                        let parse_api = parse_api_url.slice(0, 32);
-                                        let body = {
-                                            'parse_api': parse_api,
-                                            'url': Encrypt(url),
-                                            'token': token,
-                                        };
-                                        let data = post('api.php/qijiappapi.index/vodParse', body).json;
-                                        let m3u8 = JSON.parse(data).url;
-                                        if (m3u8.includes('nby') && m3u8.includes('mp4')) {
-                                            let nby = JSON.parse(fetch(m3u8, {
-                                                headers: {},
-                                                method: 'GET',
-                                                onlyHeaders: true
-                                            }))
-                                            return nby.url + '#isVideo=true#';
-                                        }
-                                        if (m3u8 == null) {
-                                            return 'toast://未获取到链接'
-                                        }
-                                        return m3u8 + '#isVideo=true#';
-                                    } catch (e) {
-                                        log(e.message)
-                                        return 'toast://未获取到链接'
-                                    }
-                                }, data.url, data.parse_api_url, data.token, data.from),
-                                col_type: data.name.length > 5 ? 'text_2' : 'text_4',
-                                extra: {
-                                    vod_url: data.url,
-                                    cls: '选集_',
-                                }
-                            }
-                        })
-                        deleteItemByCls('选集_');
-                        addItemBefore('blank', line);
-                        toast('切换排序成功');
-                    } catch (e) {
-                        refreshPage(false)
-                    }
+                    $.require("csdown").shsort();
                     return 'hiker://empty';
                 }),
                 col_type: 'scroll_button',
@@ -723,50 +666,7 @@ const csdown = {
                                 return {
                                     title: data.name,
                                     url: $().lazyRule((url, parse_api_url, token, from) => {
-                                        eval($.require("csdown").rely($.require("csdown").aes));
-                                        if (/\.m3u8|\.mp4|\.mkv/.test(url) || from == 'GBDmp4' || from == 'GNKM' && from != 'ATQP1') {
-                                            return url + '#isVideo=true#';
-                                        }
-                                        if (/\.m4a|\.mp3/.test(url)) {
-                                            return url + '#isMusic=true#';
-                                        }
-                                        try {
-                                            if (/url=/.test(parse_api_url)) {
-                                                let qq = JSON.parse(fetch(parse_api_url)).url;
-                                                if (qq.includes('nby') && qq.includes('mp4')) {
-                                                    let nby = JSON.parse(fetch(qq, {
-                                                        headers: {},
-                                                        method: 'GET',
-                                                        onlyHeaders: true
-                                                    }))
-                                                    return nby.url + '#isVideo=true#';
-                                                }
-                                                return qq + '#isVideo=true#';
-                                            }
-                                            let parse_api = parse_api_url.slice(0, 32);
-                                            let body = {
-                                                'parse_api': parse_api,
-                                                'url': Encrypt(url),
-                                                'token': token,
-                                            };
-                                            let data = post('api.php/qijiappapi.index/vodParse', body).json;
-                                            let m3u8 = JSON.parse(data).url;
-                                            if (m3u8.includes('nby') && m3u8.includes('mp4')) {
-                                                let nby = JSON.parse(fetch(m3u8, {
-                                                    headers: {},
-                                                    method: 'GET',
-                                                    onlyHeaders: true
-                                                }))
-                                                return nby.url + '#isVideo=true#';
-                                            }
-                                            if (m3u8 == null) {
-                                                return 'toast://未获取到链接'
-                                            }
-                                            return m3u8 + '#isVideo=true#';
-                                        } catch (e) {
-                                            log(e.message)
-                                            return 'toast://未获取到链接'
-                                        }
+                                        return $.require("csdown").jiexi(url, parse_api_url, token, from)
                                     }, data.url, data.parse_api_url, data.token, data.from),
                                     col_type: data.name.length > 5 ? 'text_2' : 'text_4',
                                     extra: {
@@ -798,50 +698,7 @@ const csdown = {
                 d.push({
                     title: data.name,
                     url: $().lazyRule((url, parse_api_url, token, from) => {
-                        eval($.require("csdown").rely($.require("csdown").aes));
-                        if (/\.m3u8|\.mp4|\.mkv/.test(url) || from == 'GBDmp4' || from == 'GNKM' && from != 'ATQP1') {
-                            return url + '#isVideo=true#';
-                        }
-                        if (/\.m4a|\.mp3/.test(url)) {
-                            return url + '#isMusic=true#';
-                        }
-                        try {
-                            if (/url=/.test(parse_api_url)) {
-                                let qq = JSON.parse(fetch(parse_api_url)).url;
-                                if (qq.includes('nby') && qq.includes('mp4')) {
-                                    let nby = JSON.parse(fetch(qq, {
-                                        headers: {},
-                                        method: 'GET',
-                                        onlyHeaders: true
-                                    }))
-                                    return nby.url + '#isVideo=true#';
-                                }
-                                return qq + '#isVideo=true#';
-                            }
-                            let parse_api = parse_api_url.slice(0, 32);
-                            let body = {
-                                'parse_api': parse_api,
-                                'url': Encrypt(url),
-                                'token': token,
-                            };
-                            let data = post('api.php/qijiappapi.index/vodParse', body).json;
-                            let m3u8 = JSON.parse(data).url;
-                            if (m3u8.includes('nby') && m3u8.includes('mp4')) {
-                                let nby = JSON.parse(fetch(m3u8, {
-                                    headers: {},
-                                    method: 'GET',
-                                    onlyHeaders: true
-                                }))
-                                return nby.url + '#isVideo=true#';
-                            }
-                            if (m3u8 == null) {
-                                return 'toast://未获取到链接'
-                            }
-                            return m3u8 + '#isVideo=true#';
-                        } catch (e) {
-                            log(e.message)
-                            return 'toast://未获取到链接'
-                        }
+                        return $.require("csdown").jiexi(url, parse_api_url, token, from)
                     }, data.url, data.parse_api_url, data.token, data.from),
                     col_type: data.name.length > 5 ? 'text_2' : 'text_4',
                     extra: {
@@ -893,9 +750,9 @@ const csdown = {
         }
         setResult(d)
     },
-    search: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    search: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
@@ -966,52 +823,17 @@ const csdown = {
         }
         setResult(d)
     },
-    cate: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    cate: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
                 d.push({
                     title: getMyVar('flod_', '0') == '1' ? '““””<b>' + '∨'.fontcolor("#FF0000") + '</b>' : '““””<b>' + '∧'.fontcolor("#1aad19") + '</b>',
                     url: $('#noLoading#').lazyRule(() => {
-                        eval($.require("csdown").rely($.require("csdown").aes));
-                        putMyVar('flod_', getMyVar('flod_', '0') === '1' ? '0' : '1');
-                        updateItem('flod_1', {
-                            title: getMyVar('flod_', '0') == '1' ? '““””<b>' + '∨'.fontcolor("#FF0000") + '</b>' : '““””<b>' + '∧'.fontcolor("#1aad19") + '</b>',
-                        })
-                        if (getMyVar('flod_', '0') == '1') {
-                            let flod = [];
-                            storage0.getMyVar('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
-                                let name = data.name;
-                                putMyVar('cate_index_' + name + getMyVar('type_list_index', '0'), data.list[0])
-                                data.list.forEach(data => {
-                                    flod.push({
-                                        title: getMyVar('type_list_' + name + getMyVar('type_list_index', '0'), getMyVar('cate_index_' + name + getMyVar('type_list_index', '0'))) == data ? strong(data, 'FF6699') : data,
-                                        url: $('#noLoading#').lazyRule((n, name, id) => {
-                                            putMyVar(n, id);
-                                            refreshPage(false);
-                                            return 'hiker://empty';
-                                        }, 'type_list_' + name + getMyVar('type_list_index', '0'), name, data),
-                                        col_type: 'scroll_button',
-                                        extra: {
-                                            backgroundColor: getMyVar('type_list_' + name + getMyVar('type_list_index', '0'), getMyVar('cate_index_' + name + getMyVar('type_list_index', '0'))) == data ? "#20FA7298" : "",
-                                            cls: '分类_',
-                                        }
-                                    })
-                                })
-                                flod.push({
-                                    col_type: 'blank_block',
-                                    extra: {
-                                        cls: '分类_'
-                                    }
-                                })
-                            })
-                            addItemAfter('cate_1', flod)
-                        } else {
-                            deleteItemByCls('分类_')
-                        }
-                        return "hiker://empty"
+                        return $.require("csdown").flod();
+
                     }),
                     col_type: 'scroll_button',
                     extra: {
@@ -1098,9 +920,9 @@ const csdown = {
             log(e.message)
         }
     },
-    rank: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    rank: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
@@ -1158,9 +980,9 @@ const csdown = {
             log(e.message)
         }
     },
-    week: () => {
-        var d = csdown.d;
-        eval(csdown.rely(csdown.aes));
+    week: function() {
+        var d = this.d;
+        eval(this.rely(this.aes));
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
@@ -1193,6 +1015,122 @@ const csdown = {
             })
         } catch (e) {
             log(e.message)
+        }
+    },
+    flod: function() {
+        eval(this.rely(this.aes));
+        putMyVar('flod_', getMyVar('flod_', '0') === '1' ? '0' : '1');
+        updateItem('flod_1', {
+            title: getMyVar('flod_', '0') == '1' ? '““””<b>' + '∨'.fontcolor("#FF0000") + '</b>' : '““””<b>' + '∧'.fontcolor("#1aad19") + '</b>',
+        })
+        if (getMyVar('flod_', '0') == '1') {
+            let flod = [];
+            storage0.getMyVar('type_id_')[+getMyVar('type_list_index', '0')].filter_type_list.forEach((data, index) => {
+                let name = data.name;
+                putMyVar('cate_index_' + name + getMyVar('type_list_index', '0'), data.list[0])
+                data.list.forEach(data => {
+                    flod.push({
+                        title: getMyVar('type_list_' + name + getMyVar('type_list_index', '0'), getMyVar('cate_index_' + name + getMyVar('type_list_index', '0'))) == data ? strong(data, 'FF6699') : data,
+                        url: $('#noLoading#').lazyRule((n, name, id) => {
+                            putMyVar(n, id);
+                            refreshPage(false);
+                            return 'hiker://empty';
+                        }, 'type_list_' + name + getMyVar('type_list_index', '0'), name, data),
+                        col_type: 'scroll_button',
+                        extra: {
+                            backgroundColor: getMyVar('type_list_' + name + getMyVar('type_list_index', '0'), getMyVar('cate_index_' + name + getMyVar('type_list_index', '0'))) == data ? "#20FA7298" : "",
+                            cls: '分类_',
+                        }
+                    })
+                })
+                flod.push({
+                    col_type: 'blank_block',
+                    extra: {
+                        cls: '分类_'
+                    }
+                })
+            })
+            addItemAfter('cate_1', flod)
+        } else {
+            deleteItemByCls('分类_')
+        }
+        return 'hiker://empty'
+    },
+    shsort: function() {
+        putMyVar('shsort', getMyVar('shsort') == '1' ? '0' : '1')
+        try {
+            let urls = storage0.getMyVar('vodDetail').vod_play_list[+getMyVar('info', '0')].urls;
+            if (getMyVar('shsort', '0') == '1') {
+                urls.reverse()
+            }
+            updateItem('排序', {
+                title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
+            })
+            let line = urls.map(data => {
+                return {
+                    title: data.name,
+                    url: $().lazyRule((url, parse_api_url, token, from) => {
+                        return $.require("csdown").jiexi(url, parse_api_url, token, from)
+                    }, data.url, data.parse_api_url, data.token, data.from),
+                    col_type: data.name.length > 5 ? 'text_2' : 'text_4',
+                    extra: {
+                        vod_url: data.url,
+                        cls: '选集_',
+                    }
+                }
+            })
+            deleteItemByCls('选集_');
+            addItemBefore('blank', line);
+            toast('切换排序成功');
+        } catch (e) {
+            refreshPage(false)
+        }
+        return 'hiker://empty'
+    },
+    jiexi: function(url, parse_api_url, token, from) {
+        eval(this.rely(this.aes));
+        if (/\.m3u8|\.mp4|\.mkv/.test(url) || from == 'GBDmp4' || from == 'GNKM' && from != 'ATQP1') {
+            return url + '#isVideo=true#';
+        }
+        if (/\.m4a|\.mp3/.test(url)) {
+            return url + '#isMusic=true#';
+        }
+        try {
+            if (/url=/.test(parse_api_url)) {
+                let qq = JSON.parse(fetch(parse_api_url)).url;
+                if (qq.includes('nby') && qq.includes('mp4')) {
+                    let nby = JSON.parse(fetch(qq, {
+                        headers: {},
+                        method: 'GET',
+                        onlyHeaders: true
+                    }))
+                    return nby.url + '#isVideo=true#';
+                }
+                return qq + '#isVideo=true#';
+            }
+            let parse_api = parse_api_url.slice(0, 32);
+            let body = {
+                'parse_api': parse_api,
+                'url': Encrypt(url),
+                'token': token,
+            };
+            let data = post('api.php/qijiappapi.index/vodParse', body).json;
+            let m3u8 = JSON.parse(data).url;
+            if (m3u8.includes('nby') && m3u8.includes('mp4')) {
+                let nby = JSON.parse(fetch(m3u8, {
+                    headers: {},
+                    method: 'GET',
+                    onlyHeaders: true
+                }))
+                return nby.url + '#isVideo=true#';
+            }
+            if (m3u8 == null) {
+                return 'toast://未获取到链接'
+            }
+            return m3u8 + '#isVideo=true#';
+        } catch (e) {
+            log(e.message)
+            return 'toast://未获取到链接'
         }
     },
 }
