@@ -22,6 +22,7 @@ const csdown = {
         d.push({
             title: '已失效,请自行删除',
             url: 'hiker://empty',
+            col_type:'text_1',
         })
         setResult(d)
     },
