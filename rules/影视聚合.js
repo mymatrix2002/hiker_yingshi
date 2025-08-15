@@ -2,22 +2,32 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: '20250802',
+    version: '20250815',
     home: function() {
         var d = this.d;
+        if (+MY_RULE.version < 20250815) {
+            confirm({
+                title: "本体更新",
+                content: '去除内置github加速，点击导入',
+                confirm() {
+                    return parsePaste('云6oooole/xxxxxx/fcspmpeamyysofu1@IsBrjW')
+                },
+                cancel() {}
+            });
+        }
         if (!getItem('up' + this.version, '')) {
             this.update()
             setItem('up' + this.version, '1')
         }
         if (MY_RULE.author == this.author || MY_NAME == '嗅觉浏览器') {
-            d.push({   
+            d.push({
                 title: "搜索 ",
                 url: $.toString(() => {
                     putMyVar('keyword', input)
                     return 'hiker://empty?page=fypage@rule=js:$.require("csdown").search_()';
                 }),
-                   desc: "请输入搜索关键词",
-                   col_type: "input",
+                desc: "请输入搜索关键词",
+                col_type: "input",
                 extra: {
                     onChange: $.toString(() => {
                         putMyVar('keyword', input)
@@ -102,7 +112,7 @@ const csdown = {
             clearMyVar('init');
         }));
         if (MY_PAGE == 1) {
-            d_.push({   
+            d_.push({
                 title: "搜索 ",
                 url: $.toString((host, de_key, init) => {
                     putMyVar('keyword', input);
@@ -118,8 +128,8 @@ const csdown = {
                     }
                     return 'hiker://empty?page=fypage@rule=js:$.require("csdown").search()';
                 }, MY_PARAMS.host, MY_PARAMS.de_key, MY_PARAMS.init, ),
-                   desc: "请输入搜索关键词",
-                   col_type: "input",
+                desc: "请输入搜索关键词",
+                col_type: "input",
                 extra: {
                     onChange: $.toString(() => {
                         putMyVar('keyword', input)
@@ -420,7 +430,7 @@ const csdown = {
         }, obj, id, MY_PARAMS))
     },
     update: function() {
-        const hikerPop = $.require(getItem('github_url') + "https://raw.githubusercontent.com/csdown/hiker_yingshi/refs/heads/main/rules/hikerPop.js");
+        const hikerPop = $.require("https://raw.githubusercontent.com/csdown/hiker_yingshi/refs/heads/main/rules/hikerPop.js");
         let pop = hikerPop.updateRecordsBottom([{
             title: "声明",
             records: [
@@ -827,15 +837,15 @@ const csdown = {
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
-                d_.push({   
+                d_.push({
                     title: "搜索 ",
                     url: $.toString(() => {
                         putMyVar('keyword', input)
                         refreshPage(false)
                         return "hiker://empty"
                     }),
-                       desc: "请输入搜索关键词",
-                       col_type: "input",
+                    desc: "请输入搜索关键词",
+                    col_type: "input",
                     extra: {
                         defaultValue: getMyVar('keyword', ''),
                         pageTitle: '搜索结果'
@@ -920,15 +930,15 @@ const csdown = {
         var pg = getParam('page');
         try {
             if (MY_PAGE == 1) {
-                d_.push({   
+                d_.push({
                     title: "搜索 ",
                     url: $.toString(() => {
                         putMyVar('keyword', input)
                         refreshPage(false)
                         return "hiker://empty"
                     }),
-                       desc: "请输入搜索关键词",
-                       col_type: "input",
+                    desc: "请输入搜索关键词",
+                    col_type: "input",
                     extra: {
                         defaultValue: getMyVar('keyword', ''),
                         pageTitle: '搜索结果'
