@@ -50,12 +50,20 @@ const csdown = {
             setPreResult(d_)
         }
         let 分类 = getMyVar('首页', '1');
-        if (分类 == 1) {
-            this.findvideo()
-        } else if (分类 == 2) {
-            this.cate()
-        } else if (分类 == 3) {
-            this.microvod()
+        if (MY_RULE.author == this.author || MY_NAME == '嗅觉浏览器') {
+            if (分类 == 1) {
+                this.findvideo()
+            } else if (分类 == 2) {
+                this.cate()
+            } else if (分类 == 3) {
+                this.microvod()
+            }
+        } else {
+            d.push({
+                title: '请勿修改作者名',
+                url: 'hiker://empty',
+                col_type: 'text_center_1'
+            })
         }
         deleteItem("loading_");
         setResult(d)
