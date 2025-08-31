@@ -2,7 +2,7 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: '20250830',
+    version: '20250831',
     home: function() {
         var d = this.d;
         var d_ = this.d_;
@@ -21,7 +21,7 @@ const csdown = {
                 title: "搜索 ",
                 url: $.toString(() => {
                     putMyVar('keyword', input);
-                    return 'hiker://empty?page=fypage&#gameTheme#@rule=js:$.require("csdown").search()';
+                    return 'hiker://empty?#gameTheme#@rule=js:$.require("csdown").search()';
                 }),
                    desc: "请输入搜索关键词",
                    col_type: "input",
@@ -381,6 +381,11 @@ const csdown = {
                 "““声明””：随时可能跑路",
                 "““声明””：不要相信里面的广告",
                 "““声明””：本小程序作者为““" + this.author + "””",
+            ]
+        }, {
+            title: "2025/08/31",
+            records: [
+                "““更新””：优化搜索",
             ]
         }, {
             title: "2025/08/30",
@@ -912,41 +917,108 @@ const csdown = {
     search: function() {
         var d = this.d;
         var d_ = this.d_;
-        var pg = getParam('page');
         try {
-            if (MY_PAGE == 1) {
-                d_.push({
-                    img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
-                    url: 'hiker://empty',
-                    col_type: 'pic_1_full',
-                })
-                d_.push({   
-                    title: "搜索 ",
-                    url: $.toString(() => {
-                        putMyVar('keyword', input)
-                        refreshPage(false)
-                        return "hiker://empty"
-                    }),
-                       desc: "请输入搜索关键词",
-                       col_type: "input",
-                    extra: {
-                        defaultValue: getMyVar('keyword', ''),
-                        pageTitle: '搜索结果'
-                    }
-                })
-                d_.push({
-                    img: "http://123.56.105.145/weisyr/img/Loading1.gif",
-                    url: "hiker://empty",
-                    col_type: "pic_1_full",
-                    extra: {
-                        id: "loading_"
-                    }
-                });
-                setPreResult(d_)
+            d_.push({
+                title: '',
+                col_type: 'rich_text',
+            })
+            d_.push({   
+                title: "搜索 ",
+                url: $.toString(() => {
+                    putMyVar('keyword', input)
+                    refreshPage(false)
+                    return "hiker://empty"
+                }),
+                   desc: "请输入搜索关键词",
+                   col_type: "input",
+                extra: {
+                    defaultValue: getMyVar('keyword', ''),
+                    pageTitle: '搜索结果'
+                }
+            })
+            if (!storage0.getItem('search_order_list')) {
+                let search_order_list = [{
+                    "name": "全部",
+                    "t_id": 0
+                }, {
+                    "name": "电影",
+                    "t_id": 1
+                }, {
+                    "name": "电视剧",
+                    "t_id": 2
+                }, {
+                    "name": "综艺",
+                    "t_id": 3
+                }, {
+                    "name": "动漫",
+                    "t_id": 4
+                }, {
+                    "name": "短剧",
+                    "t_id": 64
+                }];
+                storage0.setItem('search_order_list', search_order_list);
             }
+            let search_order_list = storage0.getItem('search_order_list');
+            putMyVar('search_order_index', search_order_list[0].t_id);
+            let search_order = getMyVar('search_order', getMyVar('search_order_index'));
+            search_order_list.forEach((data, index) => {
+                d_.push({
+                    title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
+                    url: $('#noLoading#').lazyRule((n, id, name) => {
+                        return $.require('csdown').search_order(id);
+                    }, 'search_order', data.t_id, data.name),
+                    col_type: 'scroll_button',
+                    extra: {
+                        backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
+                        id: 'search_cate_' + index,
+                    }
+                })
+            })
+            d_.push({
+                col_type: 'blank_block',
+                extra: {
+                    id: 'search_cate_blank',
+                }
+            })
+            if (!storage0.getItem('findOrder_list')) {
+                let findOrder_list = this.post('/App/Index/findOrder');
+                storage0.setItem('findOrder_list', findOrder_list);
+            }
+            let findOrder_list = storage0.getItem('findOrder_list');
+            putMyVar('findOrder_index', findOrder_list[0].order_val);
+            let findOrder = getMyVar('findOrder', getMyVar('findOrder_index'));
+            findOrder_list.forEach(data => {
+                d_.push({
+                    title: findOrder == data.order_val ? this.strong(data.order_key, 'ff6699') : data.order_key,
+                    url: $('#noLoading#').lazyRule((n, id, name) => {
+                        putMyVar(n, id);
+                        refreshPage(false);
+                        return 'hiker://empty';
+                    }, 'findOrder', data.order_val, data.order_key),
+                    col_type: 'scroll_button',
+                    extra: {
+                        backgroundColor: findOrder == data.order_val ? "#20FA7298" : "",
+                    }
+                })
+            })
+            d_.push({
+                img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                url: "hiker://empty",
+                col_type: "pic_1_full",
+                extra: {
+                    id: "loading_"
+                }
+            });
+            setPreResult(d_)
+            d.push({
+                col_type: 'blank_block',
+                extra: {
+                    id: 'search_blank'
+                }
+            })
             let body = JSON.stringify({
                 'keywords': getMyVar('keyword'),
-                'order_val': '1',
+                'order_val': findOrder,
             })
             let list = this.post('/App/Index/findMoreVod', body).list;
             list.forEach(data => {
@@ -962,6 +1034,8 @@ const csdown = {
                         vod_id: data.vod_id,
                         vod_name: data.vod_name,
                         lineVisible: false,
+                        cls: 'search_',
+                        t_id: data.t_id,
                     }
                 })
             })
@@ -970,6 +1044,44 @@ const csdown = {
         }
         deleteItem("loading_");
         setResult(d)
+        storage0.putMyVar('search_find', findItemsByCls('search_'));
+    },
+    search_order: function(id) {
+        try {
+            let search_order_list = storage0.getItem('search_order_list');
+            putMyVar('search_order', id);
+            let search_order = getMyVar('search_order', getMyVar('search_order_index'));
+            search_order_list.forEach((data, index) => {
+                updateItem('search_cate_' + index, {
+                    title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
+                    extra: {
+                        backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
+                        id: 'search_cate_' + index,
+                    }
+                })
+            })
+            let search_find_list = storage0.getMyVar('search_find');
+            let search_list = [];
+            if (id == '0') {
+                search_find_list.forEach(item => {
+                    item.col_type = item.type;
+                });
+                search_list = search_find_list;
+            } else {
+                search_find_list.forEach(item => {
+                    if (id == item.extra.t_id) {
+                        item.col_type = item.type;
+                        search_list.push(item);
+                    }
+                })
+            }
+            deleteItemByCls('search_');
+            addItemAfter('search_blank', search_list)
+        } catch (e) {
+            log(e.message)
+            toast('出现错误，请下滑刷新后重试！')
+        }
+        return 'hiker://empty';
     },
     cate: function() {
         var d = this.d;
