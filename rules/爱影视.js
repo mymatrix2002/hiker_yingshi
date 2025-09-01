@@ -27,6 +27,9 @@ const csdown = {
                    col_type: "input",
                 extra: {
                     defaultValue: getMyVar('keyword', ''),
+                    onChange: $.toString(() => {
+                        putMyVar('keyword', input)
+                    }),
                 }
             })
         };
@@ -393,7 +396,7 @@ const csdown = {
         }, {
             title: "2025/09/01",
             records: [
-                "““更新””：没更新",
+                "““更新””：修复搜索",
                 /*
                 "““说明””：会的可以去影视聚合里自己加\n" + JSON.stringify({
                     title: '爱影视',
@@ -586,13 +589,14 @@ const csdown = {
             if (getMyVar('shsort', '0') == '1') {
                 urls.reverse()
             }
+            let col = urls.length < 3 || urls[0].name.length > 5 ? 'text_2' : 'text_4';
             urls.forEach(data => {
                 d.push({
                     title: data.name,
                     url: $().lazyRule((url, parse_api_url, token, from) => {
                         return $.require("csdown").jiexi(url, parse_api_url, token, from)
                     }, data.url, data.parse_api_url, data.token, data.from),
-                    col_type: data.name.length > 5 ? 'text_2' : 'text_4',
+                    col_type: col,
                     extra: {
                         vod_url: data.url,
                         cls: '选集_',
@@ -646,6 +650,7 @@ const csdown = {
         var d = this.d;
         eval(this.rely(this.aes));
         var pg = getParam('page');
+        clearMyVar('yzm');
         try {
             if (MY_PAGE == 1) {
                 d.push({   
@@ -659,7 +664,10 @@ const csdown = {
                        col_type: "input",
                     extra: {
                         defaultValue: getMyVar('keyword', ''),
-                        pageTitle: '搜索结果'
+                        onChange: $.toString(() => {
+                            putMyVar('keyword', input)
+                        }),
+                        pageTitle: '搜索结果',
                     }
                 })
                 d.push({
@@ -691,24 +699,87 @@ const csdown = {
                     }
                 })
             }
-            let body = {
-                'keywords': getMyVar('keyword'),
-                'type_id': +getMyVar('search', '0'),
-                'page': +pg,
+            //生成随机uuid
+            function generateUUID() {
+                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                    var r = Math.random() * 16 | 0;
+                    var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                    return v.toString(16);
+                });
             }
-            let data = post('api.php/qijiappapi.index/searchList', body);
-            data.search_list.forEach(data => {
-                d.push({
-                    title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
-                    desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
-                    img: data.vod_pic,
-                    url: 'hiker://empty?#immersiveTheme#@rule=js:$.require("csdown").videoerji()',
-                    col_type: 'movie_1_vertical_pic',
-                    extra: {
-                        vod_id: data.vod_id,
-                        vod_name: data.vod_name,
-                    }
-                })
+            let uuid = generateUUID();
+            let key = getMyVar('host') + '/api.php/qijiappapi.verify/create?key=' + uuid;
+            d.push({
+                img: key,
+                url: key,
+                col_type: 'pic_1_center',
+                extra: {
+                    cls: 'yzm',
+                }
+            })
+            d.push({
+                col_type: 'blank_block',
+                extra: {
+                    id: 'search_blank'
+                }
+            })
+            d.push({
+                title: "",
+                url: $.toString((pg, uuid) => {
+                    return $('#noLoading#').lazyRule((pg, uuid) => {
+                        eval($.require('csdown').rely($.require('csdown').aes));
+                        let d = [];
+                        deleteItemByCls('yzm');
+                        addItemAfter('search_blank', {
+                            img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                            url: "hiker://empty",
+                            col_type: "pic_1_full",
+                            extra: {
+                                id: 'loading_'
+                            }
+                        });
+                        try {
+                            let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + getMyVar('yzm') + '&key=' + uuid;
+                            let item = post('api.php/qijiappapi.index/searchList', body);
+                            if (item.search_list && item.search_list.length > 0) {
+                                item.search_list.forEach(data => {
+                                    d.push({
+                                        title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
+                                        desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
+                                        img: data.vod_pic,
+                                        url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                                            $.require("csdown").videoerji()
+                                        }),
+                                        col_type: 'movie_1_vertical_pic',
+                                        extra: {
+                                            vod_id: data.vod_id,
+                                            vod_name: data.vod_name,
+                                            cls: 'search_list',
+                                        }
+                                    })
+                                })
+                                deleteItem('loading_');
+                                deleteItemByCls('search_list');
+                                addItemAfter('search_blank', d);
+                            }
+                        } catch (e) {
+                            toast('验证码错误');
+                            refreshPage(false)
+                        }
+                        return 'hiker://empty'
+                    }, pg, uuid)
+                }, pg, uuid),
+                desc: "请输入验证码",
+                col_type: "input",
+                extra: {
+                    defaultValue: getMyVar('yzm', ''),
+                    onChange: $.toString(() => {
+                        putMyVar('yzm', input)
+                    }),
+                    //titleVisible: false,
+                    cls: 'yzm',
+                    id: 'yzm_input',
+                }
             })
         } catch (e) {
             log(e.message)
