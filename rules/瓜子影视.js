@@ -2,12 +2,22 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: '20250831',
+    version: '20250901',
     home: function() {
         var d = this.d;
         var d_ = this.d_;
         var pg = getParam('page');
         if (MY_PAGE == 1) {
+            if (+MY_RULE.version < 20250901) {
+                confirm({
+                    title: "更新提示",
+                    content: '本体更新',
+                    confirm() {
+                        return parsePaste('云6oooole/xxxxxx/m0aotbsahqugvrkx@WzglWJ')
+                    },
+                    cancel() {}
+                });
+            }
             try {
                 if (!getItem('up' + this.version, '')) {
                     this.update()
@@ -21,10 +31,12 @@ const csdown = {
                 title: "搜索 ",
                 url: $.toString(() => {
                     putMyVar('keyword', input);
-                    return 'hiker://empty?#gameTheme#@rule=js:$.require("csdown").search()';
+                    return $('hiker://empty?#gameTheme#').rule(() => {
+                        $.require("csdown").search()
+                    })
                 }),
-                   desc: "请输入搜索关键词",
-                   col_type: "input",
+                desc: "请输入搜索关键词",
+                col_type: "input",
                 extra: {
                     onChange: $.toString(() => {
                         putMyVar('keyword', input)
@@ -383,6 +395,12 @@ const csdown = {
                 "““声明””：本小程序作者为““" + this.author + "””",
             ]
         }, {
+            title: "2025/09/01",
+            records: [
+                "““优化””：优化部分页面闪屏问题",
+                "““更新””：排序长按增加解析模式",
+            ]
+        }, {
             title: "2025/08/31",
             records: [
                 "““更新””：优化搜索",
@@ -444,7 +462,7 @@ const csdown = {
                     title: '““每日更新””',
                     img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require('csdown').latestvideo();
+                        $.require("csdown").latestvideo();
                     }),
                     col_type: 'icon_1_left_pic',
                     extra: {
@@ -454,7 +472,7 @@ const csdown = {
                 if (!getItem('token', '')) {
                     let random = 864150060000000 + Math.floor(Math.random() * 10000) + '';
                     setItem('deviceId', random);
-                    let request_key = '{"new_key":"D0AF7BE2C461432C8EBDC3A767A1711BD5F6E7E4","old_key":"aLFBMWpxBrIDAD1Si/KVvm41"}'
+                    let request_key = '{"new_key":"D0AF7BE2C461432C8EBDC3A767A1711BD5F6E7E4","old_key":"aLFBMWpxBrIDAD1Si/KVvm41"}';
                     let token = this.post('/App/Authentication/Device/signIn', request_key);
                     log(token)
                     setItem('token', token.token);
@@ -490,7 +508,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require('csdown').recommend()
+                                $.require("csdown").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -503,7 +521,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require('csdown').videoerji()
+                                    $.require("csdown").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -531,7 +549,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require('csdown').recommend()
+                                $.require("csdown").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -544,7 +562,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require('csdown').videoerji()
+                                    $.require("csdown").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -567,9 +585,9 @@ const csdown = {
         let pg = getParam('page');
         if (MY_PAGE == 1) {
             d_.push({
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
+                title: '',
                 url: 'hiker://empty',
-                col_type: 'pic_1_full',
+                col_type: 'rich_text',
             })
             d_.push({
                 img: "http://123.56.105.145/weisyr/img/Loading1.gif",
@@ -589,7 +607,7 @@ const csdown = {
                 desc: '今日正在更新：““' + data.vod_continu + '””  \n评分：““' + data.vod_scroe + '”” \n更新状态：““' + (data.is_end == true ? '已完结' : '未完结') + '””',
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require('csdown').videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_1_vertical_pic',
                 extra: {
@@ -609,6 +627,11 @@ const csdown = {
         let pg = getParam('page');
         if (MY_PAGE == 1) {
             d_.push({
+                title: '',
+                url: 'hiker://empty',
+                col_type: 'rich_text',
+            })
+            d_.push({
                 img: "http://123.56.105.145/weisyr/img/Loading1.gif",
                 url: "hiker://empty",
                 col_type: "pic_1_full",
@@ -617,11 +640,6 @@ const csdown = {
                 }
             });
             setPreResult(d_)
-            d.push({
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
-                url: 'hiker://empty',
-                col_type: 'pic_1_full',
-            })
         }
         try {
             let body = '{"cateId":"' + id + '","pageSize":"20","page":"' + pg + '"}';
@@ -632,7 +650,7 @@ const csdown = {
                     desc: '查看更多+',
                     img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require('csdown').subcatelist()
+                        $.require("csdown").subcatelist()
                     }),
                     col_type: 'avatar',
                     extra: {
@@ -649,7 +667,7 @@ const csdown = {
                     }, data.pre_video), '点击查看预览视频') : ''),
                     img: data.pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require('csdown').videoerji()
+                        $.require("csdown").videoerji()
                     }),
                     col_type: 'movie_1_vertical_pic',
                     extra: {
@@ -673,6 +691,11 @@ const csdown = {
         let name = MY_PARAMS.cate_name;
         if (MY_PAGE == 1) {
             d_.push({
+                title: '',
+                url: 'hiker://empty',
+                col_type: 'rich_text',
+            })
+            d_.push({
                 img: "http://123.56.105.145/weisyr/img/Loading1.gif",
                 url: "hiker://empty",
                 col_type: "pic_1_full",
@@ -681,11 +704,6 @@ const csdown = {
                 }
             });
             setPreResult(d_)
-            d.push({
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
-                url: 'hiker://empty',
-                col_type: 'pic_1_full',
-            })
             d.push({
                 title: name,
                 img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
@@ -701,7 +719,7 @@ const csdown = {
                 d.push({
                     title: data.name,
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require('csdown').subvodlist()
+                        $.require("csdown").subvodlist()
                     }),
                     col_type: 'text_2',
                     extra: {
@@ -724,6 +742,11 @@ const csdown = {
         let name = MY_PARAMS.cate_name;
         if (MY_PAGE == 1) {
             d_.push({
+                title: '',
+                url: 'hiker://empty',
+                col_type: 'rich_text',
+            })
+            d_.push({
                 img: "http://123.56.105.145/weisyr/img/Loading1.gif",
                 url: "hiker://empty",
                 col_type: "pic_1_full",
@@ -732,11 +755,6 @@ const csdown = {
                 }
             });
             setPreResult(d_)
-            d.push({
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
-                url: 'hiker://empty',
-                col_type: 'pic_1_full',
-            })
             d.push({
                 title: '‘‘' + name + '’’',
                 url: 'hiker://empty',
@@ -755,7 +773,7 @@ const csdown = {
                     desc: data.vod_score + ' ' + data.total,
                     img: data.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require('csdown').videoerji()
+                        $.require("csdown").videoerji()
                     }),
                     col_type: 'movie_3',
                     extra: {
@@ -828,7 +846,7 @@ const csdown = {
                 }, vod.vod_pic, vod.vod_name, vod.vod_actor, vod.videoTag.join(' '), vod.new_continue, vod.vod_area, vod.vod_use_content, vod.vod_year),
                 col_type: 'movie_1_vertical_pic_blur',
             })
-            this.setDesc(d, vod.vod_use_content)
+            this.setDesc(d, vod.vod_use_content);
             d.push({
                 title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
                 url: $('#noLoading#').lazyRule(() => {
@@ -837,6 +855,26 @@ const csdown = {
                 col_type: 'text_center_1',
                 extra: {
                     id: '排序',
+                    longClick: [{
+                        title: '选择解析模式：' + ['1080p 720p', '1080p', '1080p 720p 480p'][+getItem('jiexi_mode', '0')],
+                        js: $.toString(() => {
+                            let options = ['1080p 720p', '1080p', '1080p 720p 480p'];
+                            let Line = {
+                                title: '切换解析模式',
+                                options: options,
+                                col: 1,
+                                selectedIndex: getItem('jiexi_mode', '0'),
+                                js: $.toString((options) => {
+                                    let mode = options.indexOf(input) + '';
+                                    setItem('jiexi_mode', mode);
+                                    toast('已切换解析模式');
+                                    refreshPage(false);
+                                    return 'hiker://empty';
+                                }, options)
+                            }
+                            return 'select://' + JSON.stringify(Line);
+                        })
+                    }]
                     //lineVisible:false,
                 }
             })
@@ -965,7 +1003,7 @@ const csdown = {
                 d_.push({
                     title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
                     url: $('#noLoading#').lazyRule((n, id, name) => {
-                        return $.require('csdown').search_order(id);
+                        return $.require("csdown").search_order(id);
                     }, 'search_order', data.t_id, data.name),
                     col_type: 'scroll_button',
                     extra: {
@@ -1027,7 +1065,7 @@ const csdown = {
                     desc: '评分：' + data.vod_scroe + '\n更新状态：' + data.new_continue + '\n演员：' + data.vod_actor,
                     img: data.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require('csdown').videoerji();
+                        $.require("csdown").videoerji();
                     }),
                     col_type: 'movie_1_vertical_pic',
                     extra: {
@@ -1060,7 +1098,7 @@ const csdown = {
                     }
                 })
             })
-            let search_find_list = storage0.getMyVar('search_find');
+            let search_find_list = storage0.getMyVar('search_find') || [];
             let search_list = [];
             if (id == '0') {
                 search_find_list.forEach(item => {
@@ -1150,7 +1188,7 @@ const csdown = {
                     title: this.color('更多分类'),
                     img: 'hiker://images/icon_right5',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require('csdown').cate_more()
+                        $.require("csdown").cate_more()
                     }),
                     col_type: 'text_icon',
                     extra: {
@@ -1174,7 +1212,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require('csdown').cate_erji_1()
+                            $.require("csdown").cate_erji_1()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1187,7 +1225,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_douban_score,
                             img: data.c_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require('csdown').videoerji();
+                                $.require("csdown").videoerji();
                             }),
                             col_type: 'movie_2',
                             extra: {
@@ -1202,7 +1240,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require('csdown').cate_erji_2()
+                            $.require("csdown").cate_erji_2()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1217,7 +1255,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_scroe,
                             img: data.vod_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require('csdown').videoerji();
+                                $.require("csdown").videoerji();
                             }),
                             col_type: 'movie_3',
                             extra: {
@@ -1241,9 +1279,9 @@ const csdown = {
         let fliter = ['column', 'area', 'year', 'sort'];
         if (MY_PAGE == 1) {
             d_.push({
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
+                title: '',
                 url: 'hiker://empty',
-                col_type: 'pic_1_full',
+                col_type: 'rich_text',
             })
             fliter.forEach((item_1, index_1) => {
                 if (cate_t_id_list[item_1] && cate_t_id_list[item_1].length > 0) {
@@ -1297,7 +1335,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require('csdown').videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1314,9 +1352,9 @@ const csdown = {
         var d_ = this.d_;
         let id = MY_PARAMS.pid;
         d_.push({
-            img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
+            title: '',
             url: 'hiker://empty',
-            col_type: 'pic_1_full',
+            col_type: 'rich_text',
         })
         d_.push({
             img: "http://123.56.105.145/weisyr/img/Loading1.gif",
@@ -1335,7 +1373,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_douban_score,
                 img: data.c_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require('csdown').videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_2',
                 extra: {
@@ -1353,9 +1391,9 @@ const csdown = {
         let pid = MY_PARAMS.pid;
         let show_id = MY_PARAMS.show_id;
         d_.push({
-            img: 'https://seyouapp777.dzlndygh.com/i/2025/08/22/5e81d25c7176886d.png',
+            title: '',
             url: 'hiker://empty',
-            col_type: 'pic_1_full',
+            col_type: 'rich_text',
         })
         d_.push({
             img: "http://123.56.105.145/weisyr/img/Loading1.gif",
@@ -1374,7 +1412,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require('csdown').videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1443,7 +1481,7 @@ const csdown = {
                 d.push({
                     title: data.name,
                     desc: '““””' + this.addressTag($('hiker://empty?#immersiveTheme#').b64().rule(() => {
-                        $.require('csdown').videoerji();
+                        $.require("csdown").videoerji();
                     }), '点此观看全集') + '\n' + data.detail_info,
                     img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
                     //img:data.pic_url,
@@ -1462,7 +1500,14 @@ const csdown = {
     },
     jiexi: function(id, vurl_id) {
         try {
-            let names = ['1080', '720'];
+            let names;
+            if (getItem('jiexi_mode', '0') == '0') {
+                names = ['1080', '720'];
+            } else if (getItem('jiexi_mode', '0') == '1') {
+                names = ['1080'];
+            } else if (getItem('jiexi_mode', '0') == '2') {
+                names = ['1080', '720', '480'];
+            };
             urls = names.map(data => {
                 let request_key = '{"domain_type":"8","vod_id":"' + id + '","type":"play","resolution":"' + data + '","vurl_id":"' + vurl_id + '"}';
                 let line_url = this.post('/App/Resource/VurlDetail/showOne', request_key).url;
