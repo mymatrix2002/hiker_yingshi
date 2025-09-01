@@ -1,7 +1,7 @@
 const csdown = {
     d: [],
     author: '流苏',
-    version: '20250901',
+    version: '20250901_3',
     rely: function(data) {
         return data.match(/\{([\s\S]*)\}/)[0].replace(/\{([\s\S]*)\}/, '$1')
     },
@@ -709,6 +709,76 @@ const csdown = {
             }
             let uuid = generateUUID();
             let key = getMyVar('host') + '/api.php/qijiappapi.verify/create?key=' + uuid;
+            let ssyz = (img, type) => {
+                const MAP = {
+                    num: {
+                        'a': '4',
+                        'b': '6',
+                        'd': '0',
+                        'e': '9',
+                        'g': '9',
+                        'i': '1',
+                        'l': '1',
+                        'm': '3',
+                        's': '5',
+                        't': '7',
+                        'o': '0',
+                        'q': '9',
+                        'u': '4',
+                        'z': '2'
+                    },
+                    alpha: {
+                        '4': 'a',
+                        '6': 'b',
+                        '9': 'q',
+                        '1': 'l',
+                        '3': 'm',
+                        '5': 's',
+                        '7': 't',
+                        '0': 'o',
+                        '2': 'z'
+                    }
+                };
+
+                const currentMap = MAP[type] || {};
+
+                const ocrResult = request('https://api.nn.ci/ocr/b64/text', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: convertBase64Image(img).split(',')[1]
+                }).split('')
+                // log(ocrResult)
+                const result = [];
+                for (let i = 0; i < ocrResult.length; i++) {
+                    let char = ocrResult[i];
+                    result.push(currentMap[char] || char);
+                }
+                return result.join('')
+            }
+            let code = ssyz(key, 'num');
+            let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + code + '&key=' + uuid;
+            let item = post('api.php/qijiappapi.index/searchList', body);
+            if (item.search_list && item.search_list.length > 0) {
+                item.search_list.forEach(data => {
+                    d.push({
+                        title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
+                        desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
+                        img: data.vod_pic,
+                        url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                            $.require("csdown").videoerji()
+                        }),
+                        col_type: 'movie_1_vertical_pic',
+                        extra: {
+                            vod_id: data.vod_id,
+                            vod_name: data.vod_name,
+                            cls: 'search_list',
+                        }
+                    })
+                })
+            }
+            /*
             d.push({
                 img: key,
                 url: key,
@@ -781,6 +851,7 @@ const csdown = {
                     id: 'yzm_input',
                 }
             })
+            */
         } catch (e) {
             log(e.message)
         }
