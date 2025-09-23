@@ -2,13 +2,13 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: '20250901',
+    version: 20250901_2,
     home: function() {
         var d = this.d;
         var d_ = this.d_;
         var pg = getParam('page');
         if (MY_PAGE == 1) {
-            if (+MY_RULE.version < 20250901) {
+            if (MY_RULE.version < 20250901) {
                 confirm({
                     title: "更新提示",
                     content: '本体更新',
@@ -32,7 +32,7 @@ const csdown = {
                 url: $.toString(() => {
                     putMyVar('keyword', input);
                     return $('hiker://empty?#gameTheme#').rule(() => {
-                        $.require("csdown").search()
+                        $.require("csdown?rule=瓜子影视").search()
                     })
                 }),
                 desc: "请输入搜索关键词",
@@ -52,7 +52,7 @@ const csdown = {
             let longclick = [{
                 title: '更新日志',
                 js: $.toString(() => {
-                    $.require("csdown").update()
+                    $.require("csdown?rule=瓜子影视").update()
                 })
             }]
             this.Cate(首页, '首页', d_, 'icon_small_3', longclick);
@@ -94,24 +94,22 @@ const csdown = {
         return "<a href='" + url + "'>" + text + "</a>";
     },
     Cate: function(list, n, d, col, longclick) {
-        if (!col) {
-            col = 'scroll_button';
-        }
-        if (!longclick) {
-            longclick = [];
-        }
-        var index_n = list[0].id.split('&')[0] + '';
+        col = col || 'scroll_button';
+        longclick = longclick || [];
+        let index_n = list[0].id.split('&')[0] + '';
         list.forEach(data => {
-            var title = data.title.split('&');
-            var id = data.id.split('&');
+            let title = data.title.split('&');
+            let id = data.id.split('&');
+            let img;
             if (data.img != null) {
-                var img = data.img.split('&');
+                img = data.img.split('&');
             } else {
-                var img = [];
+                img = [];
             }
+            let n_ = getMyVar(n, index_n);
             title.forEach((title, index) => {
                 d.push({
-                    title: (getMyVar(n, index_n) == id[index] ? (col == 'icon_small_3' ? this.color(title) : this.strong(title, 'FF6699')) : title),
+                    title: (n_ == id[index] ? (col == 'icon_small_3' ? this.color(title) : this.strong(title, 'FF6699')) : title),
                     img: img[index],
                     url: $('#noLoading#').lazyRule((n, title, id) => {
                         putMyVar(n, id);
@@ -121,7 +119,7 @@ const csdown = {
                     col_type: col,
                     extra: {
                         longClick: longclick,
-                        backgroundColor: getMyVar(n, index_n) == id[index] ? "#20FA7298" : "",
+                        backgroundColor: n_ == id[index] ? "#20FA7298" : "",
                     }
                 })
             })
@@ -318,7 +316,7 @@ const csdown = {
             desc: desc,
             title: item.vod_name,
             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                $.require("csdown").videoerji()
+                $.require("csdown?rule=瓜子影视").videoerji()
             }),
             extra: {
                 id: id + 'bar',
@@ -362,7 +360,7 @@ const csdown = {
                     title: item.vod_name,
                     img: item.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown").videoerji()
+                        $.require("csdown?rule=瓜子影视").videoerji()
                     }),
                     extra: {
                         //name: item.title.replace(/<[^>]+>/g, ''),
@@ -434,57 +432,18 @@ const csdown = {
                     });
                     setPreResult(d_)
                 }
-                if (getMyVar('a', '') == '') {
-                    /*
-                    let api_url_list = JSON.parse(fetch('https://api.moe3dze.com/gz/initialize/getApiUrlList?parameter=key', {
-                        headers: {
-                            'client-version': '3.0.2.0',
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: 'parameter=',
-                        method: 'POST',
-                    }));
-                    let api_list = JSON.parse(this.Decrypt(api_url_list.data, 'KANGEQIU@8868!~.', '0200010900030207'));
-                    */
-                    let api_list = ['https://api.w32z7vtd.com', 'https://api.yajfv2ph.com', 'https://api.txxhuc.com', 'https://api.cpcsfgyp.com', 'https://api.moe3dze.com', 'https://api.36kzbh85.com']
-                    for (let item of api_list) {
-                        let host = item;
-                        let data = fetch(host + '/domain/check');
-                        if (data == 'success') {
-                            setItem('host', host);
-                            log(host)
-                            putMyVar('a', '1');
-                            break;
-                        }
-                    }
-                }
+                this.host_url()
                 d.push({
                     title: '““每日更新””',
-                    img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
+                    img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown").latestvideo();
+                        $.require("csdown?rule=瓜子影视").latestvideo();
                     }),
                     col_type: 'icon_1_left_pic',
                     extra: {
                         lineVisible: false
                     }
                 })
-                if (!getItem('token', '')) {
-                    let random = 864150060000000 + Math.floor(Math.random() * 10000) + '';
-                    setItem('deviceId', random);
-                    let request_key = '{"new_key":"D0AF7BE2C461432C8EBDC3A767A1711BD5F6E7E4","old_key":"aLFBMWpxBrIDAD1Si/KVvm41"}';
-                    let token = this.post('/App/Authentication/Device/signIn', request_key);
-                    log(token)
-                    setItem('token', token.token);
-                    setItem('token_id', token.app_user_id);
-                }
-                if (!getMyVar('token_refresh', '')) {
-                    let token_refresh = this.post('/App/Authentication/Authenticator/refresh');
-                    log(token_refresh);
-                    setItem('token', token_refresh.token);
-                    setItem('token_id', token_refresh.app_user_id);
-                    putMyVar('token_refresh', '1')
-                }
                 if (!storage0.getMyVar('NewDiscover')) {
                     let NewDiscover = this.post('/App/NewDiscover/getIndex');
                     storage0.putMyVar('NewDiscover', NewDiscover);
@@ -508,7 +467,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require("csdown").recommend()
+                                $.require("csdown?rule=瓜子影视").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -521,7 +480,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require("csdown").videoerji()
+                                    $.require("csdown?rule=瓜子影视").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -549,7 +508,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require("csdown").recommend()
+                                $.require("csdown?rule=瓜子影视").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -562,7 +521,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require("csdown").videoerji()
+                                    $.require("csdown?rule=瓜子影视").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -577,6 +536,48 @@ const csdown = {
             }
         } catch (e) {
             log(e.message)
+        }
+    },
+    host_url: function() {
+        if (getMyVar('a', '') == '') {
+            /*
+                        let api_url_list = JSON.parse(fetch('https://api.moe3dze.com/gz/initialize/getApiUrlList?parameter=key', {
+                            headers: {
+                                'client-version': '3.0.2.0',
+                                'Content-Type': 'application/x-www-form-urlencoded',
+                            },
+                            body: 'parameter=',
+                            method: 'POST',
+                        }));
+                        let api_list = JSON.parse(this.Decrypt(api_url_list.data, 'KANGEQIU@8868!~.', '0200010900030207'));
+                        */
+            let api_list = ['https://api.w32z7vtd.com', 'https://api.yajfv2ph.com', 'https://api.txxhuc.com', 'https://api.cpcsfgyp.com', 'https://api.moe3dze.com', 'https://api.36kzbh85.com']
+            for (let item of api_list) {
+                let host = item;
+                let data = fetch(host + '/domain/check');
+                if (data == 'success') {
+                    setItem('host', host);
+                    log(host)
+                    putMyVar('a', '1');
+                    break;
+                }
+            }
+        }
+        if (!getItem('token', '')) {
+            let random = 864150060000000 + Math.floor(Math.random() * 10000) + '';
+            setItem('deviceId', random);
+            let request_key = '{"new_key":"D0AF7BE2C461432C8EBDC3A767A1711BD5F6E7E4","old_key":"aLFBMWpxBrIDAD1Si/KVvm41"}';
+            let token = this.post('/App/Authentication/Device/signIn', request_key);
+            log(token)
+            setItem('token', token.token);
+            setItem('token_id', token.app_user_id);
+        }
+        if (!getMyVar('token_refresh', '')) {
+            let token_refresh = this.post('/App/Authentication/Authenticator/refresh');
+            log(token_refresh);
+            setItem('token', token_refresh.token);
+            setItem('token_id', token_refresh.app_user_id);
+            putMyVar('token_refresh', '1')
         }
     },
     latestvideo: function() {
@@ -607,7 +608,7 @@ const csdown = {
                 desc: '今日正在更新：““' + data.vod_continu + '””  \n评分：““' + data.vod_scroe + '”” \n更新状态：““' + (data.is_end == true ? '已完结' : '未完结') + '””',
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown").videoerji();
+                    $.require("csdown?rule=瓜子影视").videoerji();
                 }),
                 col_type: 'movie_1_vertical_pic',
                 extra: {
@@ -648,9 +649,9 @@ const csdown = {
                 d.push({
                     title: recommend.name,
                     desc: '查看更多+',
-                    img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
+                    img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown").subcatelist()
+                        $.require("csdown?rule=瓜子影视").subcatelist()
                     }),
                     col_type: 'avatar',
                     extra: {
@@ -667,7 +668,7 @@ const csdown = {
                     }, data.pre_video), '点击查看预览视频') : ''),
                     img: data.pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown").videoerji()
+                        $.require("csdown?rule=瓜子影视").videoerji()
                     }),
                     col_type: 'movie_1_vertical_pic',
                     extra: {
@@ -706,7 +707,7 @@ const csdown = {
             setPreResult(d_)
             d.push({
                 title: name,
-                img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
+                img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                 url: 'hiker://empty',
                 col_type: 'avatar',
                 extra: {}
@@ -719,7 +720,7 @@ const csdown = {
                 d.push({
                     title: data.name,
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown").subvodlist()
+                        $.require("csdown?rule=瓜子影视").subvodlist()
                     }),
                     col_type: 'text_2',
                     extra: {
@@ -773,7 +774,7 @@ const csdown = {
                     desc: data.vod_score + ' ' + data.total,
                     img: data.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown").videoerji()
+                        $.require("csdown?rule=瓜子影视").videoerji()
                     }),
                     col_type: 'movie_3',
                     extra: {
@@ -850,7 +851,7 @@ const csdown = {
             d.push({
                 title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
                 url: $('#noLoading#').lazyRule(() => {
-                    return $.require("csdown").shsort();
+                    return $.require("csdown?rule=瓜子影视").shsort();
                 }),
                 col_type: 'text_center_1',
                 extra: {
@@ -874,8 +875,8 @@ const csdown = {
                             }
                             return 'select://' + JSON.stringify(Line);
                         })
-                    }]
-                    //lineVisible:false,
+                    }],
+                    lineVisible:false,
                 }
             })
             try {
@@ -893,12 +894,12 @@ const csdown = {
                         }
                     })
                 }
-                let col = urls.length < 3 || urls[0].title.length > 5 ? 'text_2' : 'text_4'
+                let col = urls.length < 3 || urls[0].title.length > 5 ? 'text_2' : 'text_4';
                 urls.forEach(data => {
                     d.push({
                         title: data.title,
                         url: $().lazyRule((id, vurl_id) => {
-                            return $.require("csdown").jiexi(id, vurl_id)
+                            return $.require("csdown?rule=瓜子影视").jiexi(id, vurl_id)
                         }, id, data.id),
                         col_type: col,
                         extra: {
@@ -938,7 +939,7 @@ const csdown = {
                             clearMyVar('Vurl')
                             putMyVar('vod_id_1', MY_PARAMS.vod_id)
                         }
-                        $.require("csdown").videoerji();
+                        $.require("csdown?rule=瓜子影视").videoerji();
                     }),
                     col_type: 'movie_3',
                     extra: {
@@ -955,131 +956,136 @@ const csdown = {
     search: function() {
         var d = this.d;
         var d_ = this.d_;
-        try {
-            d_.push({
-                title: '',
-                col_type: 'rich_text',
-            })
-            d_.push({   
-                title: "搜索 ",
-                url: $.toString(() => {
-                    putMyVar('keyword', input)
-                    refreshPage(false)
-                    return "hiker://empty"
-                }),
-                   desc: "请输入搜索关键词",
-                   col_type: "input",
-                extra: {
-                    defaultValue: getMyVar('keyword', ''),
-                    pageTitle: '搜索结果'
-                }
-            })
-            if (!storage0.getItem('search_order_list')) {
-                let search_order_list = [{
-                    "name": "全部",
-                    "t_id": 0
-                }, {
-                    "name": "电影",
-                    "t_id": 1
-                }, {
-                    "name": "电视剧",
-                    "t_id": 2
-                }, {
-                    "name": "综艺",
-                    "t_id": 3
-                }, {
-                    "name": "动漫",
-                    "t_id": 4
-                }, {
-                    "name": "短剧",
-                    "t_id": 64
-                }];
-                storage0.setItem('search_order_list', search_order_list);
+        //try {
+        d_.push({
+            title: '',
+            col_type: 'rich_text',
+        })
+        d_.push({   
+            title: "搜索 ",
+            url: $.toString(() => {
+                putMyVar('keyword', input)
+                refreshPage(false)
+                return "hiker://empty"
+            }),
+               desc: "请输入搜索关键词",
+               col_type: "input",
+            extra: {
+                defaultValue: getMyVar('keyword', ''),
+                pageTitle: '搜索结果'
             }
-            let search_order_list = storage0.getItem('search_order_list');
-            putMyVar('search_order_index', search_order_list[0].t_id);
-            let search_order = getMyVar('search_order', getMyVar('search_order_index'));
-            search_order_list.forEach((data, index) => {
-                d_.push({
-                    title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
-                    url: $('#noLoading#').lazyRule((n, id, name) => {
-                        return $.require("csdown").search_order(id);
-                    }, 'search_order', data.t_id, data.name),
-                    col_type: 'scroll_button',
-                    extra: {
-                        backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
-                        id: 'search_cate_' + index,
-                    }
-                })
-            })
+        })
+        if (getMyVar('a', '') == '') {
+            this.host_url()
+        }
+        if (!storage0.getItem('search_order_list')) {
+            let search_order_list = [{
+                "name": "全部",
+                "t_id": 0
+            }, {
+                "name": "电影",
+                "t_id": 1
+            }, {
+                "name": "电视剧",
+                "t_id": 2
+            }, {
+                "name": "综艺",
+                "t_id": 3
+            }, {
+                "name": "动漫",
+                "t_id": 4
+            }, {
+                "name": "短剧",
+                "t_id": 64
+            }];
+            storage0.setItem('search_order_list', search_order_list);
+        }
+        let search_order_list = storage0.getItem('search_order_list');
+        putMyVar('search_order_index', search_order_list[0].t_id);
+        let search_order = getMyVar('search_order', getMyVar('search_order_index'));
+        search_order_list.forEach((data, index) => {
             d_.push({
-                col_type: 'blank_block',
+                title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
+                url: $('#noLoading#').lazyRule((n, id, name) => {
+                    return $.require("csdown?rule=瓜子影视").search_order(id);
+                }, 'search_order', data.t_id, data.name),
+                col_type: 'scroll_button',
                 extra: {
-                    id: 'search_cate_blank',
+                    backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
+                    id: 'search_cate_' + index,
                 }
             })
-            if (!storage0.getItem('findOrder_list')) {
-                let findOrder_list = this.post('/App/Index/findOrder');
-                storage0.setItem('findOrder_list', findOrder_list);
+        })
+        d_.push({
+            col_type: 'blank_block',
+            extra: {
+                id: 'search_cate_blank',
             }
-            let findOrder_list = storage0.getItem('findOrder_list');
-            putMyVar('findOrder_index', findOrder_list[0].order_val);
-            let findOrder = getMyVar('findOrder', getMyVar('findOrder_index'));
-            findOrder_list.forEach(data => {
-                d_.push({
-                    title: findOrder == data.order_val ? this.strong(data.order_key, 'ff6699') : data.order_key,
-                    url: $('#noLoading#').lazyRule((n, id, name) => {
-                        putMyVar(n, id);
-                        refreshPage(false);
-                        return 'hiker://empty';
-                    }, 'findOrder', data.order_val, data.order_key),
-                    col_type: 'scroll_button',
-                    extra: {
-                        backgroundColor: findOrder == data.order_val ? "#20FA7298" : "",
-                    }
-                })
-            })
+        })
+        if (!storage0.getItem('findOrder_list')) {
+            let findOrder_list = this.post('/App/Index/findOrder');
+            storage0.setItem('findOrder_list', findOrder_list);
+        }
+        let findOrder_list = storage0.getItem('findOrder_list');
+        putMyVar('findOrder_index', findOrder_list[0].order_val);
+        let findOrder = getMyVar('findOrder', getMyVar('findOrder_index'));
+        findOrder_list.forEach(data => {
             d_.push({
-                img: "http://123.56.105.145/weisyr/img/Loading1.gif",
-                url: "hiker://empty",
-                col_type: "pic_1_full",
+                title: findOrder == data.order_val ? this.strong(data.order_key, 'ff6699') : data.order_key,
+                url: $('#noLoading#').lazyRule((n, id, name) => {
+                    putMyVar(n, id);
+                    refreshPage(false);
+                    return 'hiker://empty';
+                }, 'findOrder', data.order_val, data.order_key),
+                col_type: 'scroll_button',
                 extra: {
-                    id: "loading_"
+                    backgroundColor: findOrder == data.order_val ? "#20FA7298" : "",
                 }
-            });
-            setPreResult(d_)
+            })
+        })
+        d_.push({
+            img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+            url: "hiker://empty",
+            col_type: "pic_1_full",
+            extra: {
+                id: "loading_"
+            }
+        });
+        setPreResult(d_)
+        d.push({
+            col_type: 'blank_block',
+            extra: {
+                id: 'search_blank'
+            }
+        })
+        let body = JSON.stringify({
+            'keywords': getMyVar('keyword'),
+            'order_val': findOrder,
+        })
+        let list = this.post('/App/Index/findMoreVod', body).list;
+        list.forEach(data => {
             d.push({
-                col_type: 'blank_block',
+                title: data.vod_name + '\n““””' + ('上映时间：' + data.vod_year + '\n地区：' + data.vod_area).small(),
+                desc: '评分：' + data.vod_scroe + '\n更新状态：' + data.new_continue + '\n演员：' + data.vod_actor,
+                img: data.vod_pic,
+                url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                    $.require("csdown?rule=瓜子影视").videoerji();
+                }),
+                col_type: 'movie_1_vertical_pic',
                 extra: {
-                    id: 'search_blank'
+                    vod_id: data.vod_id,
+                    vod_name: data.vod_name,
+                    lineVisible: false,
+                    cls: 'search_',
+                    t_id: data.t_id,
                 }
             })
-            let body = JSON.stringify({
-                'keywords': getMyVar('keyword'),
-                'order_val': findOrder,
-            })
-            let list = this.post('/App/Index/findMoreVod', body).list;
-            list.forEach(data => {
-                d.push({
-                    title: data.vod_name + '\n““””' + ('上映时间：' + data.vod_year + '\n地区：' + data.vod_area).small(),
-                    desc: '评分：' + data.vod_scroe + '\n更新状态：' + data.new_continue + '\n演员：' + data.vod_actor,
-                    img: data.vod_pic,
-                    url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown").videoerji();
-                    }),
-                    col_type: 'movie_1_vertical_pic',
-                    extra: {
-                        vod_id: data.vod_id,
-                        vod_name: data.vod_name,
-                        lineVisible: false,
-                        cls: 'search_',
-                        t_id: data.t_id,
-                    }
-                })
-            })
+        })
+        /*
         } catch (e) {
             log(e.message)
         }
+        */
         deleteItem("loading_");
         setResult(d)
         storage0.putMyVar('search_find', findItemsByCls('search_'));
@@ -1134,9 +1140,11 @@ const csdown = {
                 let indexPid = storage0.getItem('indexPid');
                 putMyVar('cate_t_id_index', indexPid[0].t_id);
                 putMyVar('cate_pid_index', indexPid[0].pid);
+                let cate_t_id = getMyVar('cate_t_id', getMyVar('cate_t_id_index'));
+                let cate_pid = getMyVar('cate_pid', getMyVar('cate_pid_index'));
                 indexPid.forEach(data => {
                     d_.push({
-                        title: getMyVar('cate_pid', getMyVar('cate_pid_index')) == data.pid ? this.strong(data.name, 'ff6699') : data.name,
+                        title: cate_pid == data.pid ? this.strong(data.name, 'ff6699') : data.name,
                         url: $('#noLoading#').lazyRule((t_id, pid, name) => {
                             putMyVar('cate_t_id', t_id);
                             putMyVar('cate_pid', pid);
@@ -1145,14 +1153,12 @@ const csdown = {
                         }, data.t_id, data.pid, data.name),
                         col_type: 'scroll_button',
                         extra: {
-                            backgroundColor: getMyVar('cate_pid', getMyVar('cate_pid_index')) == data.pid ? "#20FA7298" : "",
+                            backgroundColor: cate_pid == data.pid ? "#20FA7298" : "",
                             t_id: data.t_id,
                             pid: data.pid,
                         }
                     })
                 })
-                let cate_t_id = getMyVar('cate_t_id', getMyVar('cate_t_id_index'));
-                let cate_pid = getMyVar('cate_pid', getMyVar('cate_pid_index'));
                 if (!storage0.getMyVar('indexlist_' + cate_pid)) {
                     d_.push({
                         img: "http://123.56.105.145/weisyr/img/Loading1.gif",
@@ -1188,7 +1194,7 @@ const csdown = {
                     title: this.color('更多分类'),
                     img: 'hiker://images/icon_right5',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown").cate_more()
+                        $.require("csdown?rule=瓜子影视").cate_more()
                     }),
                     col_type: 'text_icon',
                     extra: {
@@ -1212,7 +1218,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require("csdown").cate_erji_1()
+                            $.require("csdown?rule=瓜子影视").cate_erji_1()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1225,7 +1231,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_douban_score,
                             img: data.c_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require("csdown").videoerji();
+                                $.require("csdown?rule=瓜子影视").videoerji();
                             }),
                             col_type: 'movie_2',
                             extra: {
@@ -1240,7 +1246,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require("csdown").cate_erji_2()
+                            $.require("csdown?rule=瓜子影视").cate_erji_2()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1255,7 +1261,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_scroe,
                             img: data.vod_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require("csdown").videoerji();
+                                $.require("csdown?rule=瓜子影视").videoerji();
                             }),
                             col_type: 'movie_3',
                             extra: {
@@ -1335,7 +1341,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown").videoerji();
+                    $.require("csdown?rule=瓜子影视").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1373,7 +1379,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_douban_score,
                 img: data.c_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown").videoerji();
+                    $.require("csdown?rule=瓜子影视").videoerji();
                 }),
                 col_type: 'movie_2',
                 extra: {
@@ -1412,7 +1418,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown").videoerji();
+                    $.require("csdown?rule=瓜子影视").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1481,9 +1487,9 @@ const csdown = {
                 d.push({
                     title: data.name,
                     desc: '““””' + this.addressTag($('hiker://empty?#immersiveTheme#').b64().rule(() => {
-                        $.require("csdown").videoerji();
+                        $.require("csdown?rule=瓜子影视").videoerji();
                     }), '点此观看全集') + '\n' + data.detail_info,
-                    img: 'https://seyouapp777.dzlndygh.com/i/2025/08/29/1000069041.png',
+                    img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                     //img:data.pic_url,
                     url: data.default_play_url,
                     col_type: 'movie_1_vertical_pic',
@@ -1523,17 +1529,19 @@ const csdown = {
         }
     },
     shsort: function() {
-        putMyVar('shsort', getMyVar('shsort') == '1' ? '0' : '1')
+        let shsort = getMyVar('shsort');
+        putMyVar('shsort', shsort == '1' ? '0' : '1');
+        shsort = getMyVar('shsort');
         try {
-            let urls = findItemsByCls("选集_");
+            let urls = findItemsByCls("选集_") || [];
+            deleteItemByCls('选集_');
             urls.reverse();
             urls.forEach(item => {
                 item.col_type = item.type;
             });
             updateItem('排序', {
-                title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
+                title: (shsort == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
             })
-            deleteItemByCls('选集_');
             addItemBefore('blank', urls);
             toast('切换排序成功');
         } catch (e) {
