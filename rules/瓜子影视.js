@@ -2,11 +2,11 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: 20250901_2,
+    version: 20251008,
     home: function() {
         var d = this.d;
         var d_ = this.d_;
-        var pg = getParam('page');
+        var pg = MY_PAGE;
         if (MY_PAGE == 1) {
             if (MY_RULE.version < 20250901) {
                 confirm({
@@ -31,8 +31,8 @@ const csdown = {
                 title: "搜索 ",
                 url: $.toString(() => {
                     putMyVar('keyword', input);
-                    return $('hiker://empty?#gameTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").search()
+                    return $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
+                        $.require("csdown").search()
                     })
                 }),
                 desc: "请输入搜索关键词",
@@ -45,17 +45,17 @@ const csdown = {
                 }
             })
             let 首页 = [{
-                title: '发现&首页&视频',
+                title: '发现&首页&视频&小说&漫画',
                 id: '1&2&3&4&5',
-                img: 'https://images.jjawa.com/admin/202502130853510new.jpg&https://images.jjawa.com/admin/202502130853420new.jpg&https://images.jjawa.com/admin/202502130854737new.jpg&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/48.png&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/109.png'
+                img: 'https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/47.png&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/175.png&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/78.png&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/48.png&https://ghproxy.net/https://raw.githubusercontent.com/ls125781003/tubiao/main/more/109.png'
             }];
             let longclick = [{
                 title: '更新日志',
                 js: $.toString(() => {
-                    $.require("csdown?rule=瓜子影视").update()
+                    $.require("csdown").update()
                 })
             }]
-            this.Cate(首页, '首页', d_, 'icon_small_3', longclick);
+            this.Cate(首页, '首页', d_, 'icon_5', longclick);
             d_.push({
                 col_type: 'big_blank_block',
             });
@@ -69,6 +69,10 @@ const csdown = {
                 this.cate()
             } else if (分类 == 3) {
                 this.microvod()
+            } else if (分类 == 4) {
+                this.novel()
+            } else if (分类 == 5) {
+                this.comic()
             }
         } else {
             d.push({
@@ -203,14 +207,14 @@ const csdown = {
         let body = 'token=' + token + '&token_id=&phone_type=1&time=' + t + '&phone_model=xiaomi-25031&keys=' + keys + '&request_key=' + request_key + '&signature=' + signature.toUpperCase() + '&app_id=1&ad_version=1';
         let html = JSON.parse(fetch(getItem('host') + url, {
             headers: {
-                'code': 'GZ0369',
+                'code': 'GZ0611',
                 'deviceId': getItem('deviceId'),
                 'lang': 'zh_cn',
                 'Cache-Control': 'no-cache',
                 'Version': '2506030',
-                'PackageName': 'com.eb02f73729.bdd0c986e4.t721f00a9d20250830',
-                'Ver': '3.0.2.0',
-                'api-ver': '3.0.2.0',
+                'PackageName': 'com.w634aa81a0.u87401fb17.u66645d4a420250930',
+                'Ver': '3.0.3.2',
+                'api-ver': '3.0.3.2',
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
             body: body,
@@ -235,7 +239,7 @@ const csdown = {
         desc = desc.replace(/'/g, "&#39;");
         desc = desc.replace(/\r\n/g, "<br>");
         desc = desc.replace(/\r/g, "<br>");
-        desc = desc.replace(/\n/g, "<br>").replace(/[<p>|</p>]/g, "");
+        desc = desc.replace(/\n/g, "<br>").replace(/[<p>|</p>]/g, "").replace(/br/g, "<br>");
 
         function substr(str, maxLength) {
             let len = 0;
@@ -316,7 +320,7 @@ const csdown = {
             desc: desc,
             title: item.vod_name,
             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                $.require("csdown?rule=瓜子影视").videoerji()
+                $.require("csdown").videoerji()
             }),
             extra: {
                 id: id + 'bar',
@@ -360,7 +364,7 @@ const csdown = {
                     title: item.vod_name,
                     img: item.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").videoerji()
+                        $.require("csdown").videoerji()
                     }),
                     extra: {
                         //name: item.title.replace(/<[^>]+>/g, ''),
@@ -383,7 +387,7 @@ const csdown = {
         }, obj, id, MY_PARAMS))
     },
     update: function() {
-        const hikerPop = $.require("https://raw.githubusercontent.com/csdown/hiker_yingshi/refs/heads/main/rules/hikerPop.js");
+        const hikerPop = $.require("http://123.56.105.145/weisyr/js/hikerPop.js");
         let pop = hikerPop.updateRecordsBottom([{
             title: "声明",
             records: [
@@ -391,6 +395,13 @@ const csdown = {
                 "““声明””：随时可能跑路",
                 "““声明””：不要相信里面的广告",
                 "““声明””：本小程序作者为““" + this.author + "””",
+            ]
+        },{
+            title: "2025/10/08",
+            records: [
+                "““更新””：主页增加漫画和小说",
+                "““更新””：搜索增加漫画和小说",
+                "““优化””：优化部分页面",
             ]
         }, {
             title: "2025/09/01",
@@ -413,7 +424,7 @@ const csdown = {
     findvideo: function() {
         var d = this.d;
         var d_ = this.d_;
-        var pg = getParam('page');
+        var pg = MY_PAGE;
         try {
             if (MY_PAGE == 1) {
                 if (!storage0.getMyVar('NewDiscover')) {
@@ -437,7 +448,7 @@ const csdown = {
                     title: '““每日更新””',
                     img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").latestvideo();
+                        $.require("csdown").latestvideo();
                     }),
                     col_type: 'icon_1_left_pic',
                     extra: {
@@ -467,7 +478,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require("csdown?rule=瓜子影视").recommend()
+                                $.require("csdown").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -480,7 +491,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require("csdown?rule=瓜子影视").videoerji()
+                                    $.require("csdown").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -508,7 +519,7 @@ const csdown = {
                             //img:item_1.pic,
                             img: 'hiker://images/icon_right5',
                             url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                                $.require("csdown?rule=瓜子影视").recommend()
+                                $.require("csdown").recommend()
                             }),
                             col_type: 'text_icon',
                             extra: {
@@ -521,7 +532,7 @@ const csdown = {
                                 title: data.name,
                                 img: data.vod_pic,
                                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                    $.require("csdown?rule=瓜子影视").videoerji()
+                                    $.require("csdown").videoerji()
                                 }),
                                 col_type: 'movie_3',
                                 extra: {
@@ -543,7 +554,7 @@ const csdown = {
             /*
                         let api_url_list = JSON.parse(fetch('https://api.moe3dze.com/gz/initialize/getApiUrlList?parameter=key', {
                             headers: {
-                                'client-version': '3.0.2.0',
+                                'client-version': '3.0.3.2',
                                 'Content-Type': 'application/x-www-form-urlencoded',
                             },
                             body: 'parameter=',
@@ -551,7 +562,7 @@ const csdown = {
                         }));
                         let api_list = JSON.parse(this.Decrypt(api_url_list.data, 'KANGEQIU@8868!~.', '0200010900030207'));
                         */
-            let api_list = ['https://api.w32z7vtd.com', 'https://api.yajfv2ph.com', 'https://api.txxhuc.com', 'https://api.cpcsfgyp.com', 'https://api.moe3dze.com', 'https://api.36kzbh85.com']
+            let api_list = ['https://api.5udaneqy.com', 'https://api.36kzbh85.com', 'https://api.w32z7vtd.com', 'https://api.yajfv2ph.com', 'https://api.txxhuc.com', 'https://api.cpcsfgyp.com', 'https://api.moe3dze.com', 'https://api.36kzbh85.com']
             for (let item of api_list) {
                 let host = item;
                 let data = fetch(host + '/domain/check');
@@ -583,7 +594,7 @@ const csdown = {
     latestvideo: function() {
         var d = this.d;
         var d_ = this.d_;
-        let pg = getParam('page');
+        let pg = MY_PAGE;
         if (MY_PAGE == 1) {
             d_.push({
                 title: '',
@@ -608,7 +619,7 @@ const csdown = {
                 desc: '今日正在更新：““' + data.vod_continu + '””  \n评分：““' + data.vod_scroe + '”” \n更新状态：““' + (data.is_end == true ? '已完结' : '未完结') + '””',
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown?rule=瓜子影视").videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_1_vertical_pic',
                 extra: {
@@ -625,7 +636,7 @@ const csdown = {
         var d = [];
         var d_ = this.d_;
         let id = MY_PARAMS.cate_id;
-        let pg = getParam('page');
+        let pg = MY_PAGE;
         if (MY_PAGE == 1) {
             d_.push({
                 title: '',
@@ -651,7 +662,7 @@ const csdown = {
                     desc: '查看更多+',
                     img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").subcatelist()
+                        $.require("csdown").subcatelist()
                     }),
                     col_type: 'avatar',
                     extra: {
@@ -668,7 +679,7 @@ const csdown = {
                     }, data.pre_video), '点击查看预览视频') : ''),
                     img: data.pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").videoerji()
+                        $.require("csdown").videoerji()
                     }),
                     col_type: 'movie_1_vertical_pic',
                     extra: {
@@ -687,7 +698,7 @@ const csdown = {
     subcatelist: function() {
         var d = this.d;
         var d_ = this.d_;
-        let pg = getParam('page');
+        let pg = MY_PAGE;
         let id = MY_PARAMS.cate_id;
         let name = MY_PARAMS.cate_name;
         if (MY_PAGE == 1) {
@@ -720,7 +731,7 @@ const csdown = {
                 d.push({
                     title: data.name,
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").subvodlist()
+                        $.require("csdown").subvodlist()
                     }),
                     col_type: 'text_2',
                     extra: {
@@ -738,7 +749,7 @@ const csdown = {
     subvodlist: function() {
         var d = this.d;
         var d_ = this.d_;
-        let pg = getParam('page');
+        let pg = MY_PAGE;
         let id = MY_PARAMS.cate_id;
         let name = MY_PARAMS.cate_name;
         if (MY_PAGE == 1) {
@@ -774,7 +785,7 @@ const csdown = {
                     desc: data.vod_score + ' ' + data.total,
                     img: data.vod_pic,
                     url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").videoerji()
+                        $.require("csdown").videoerji()
                     }),
                     col_type: 'movie_3',
                     extra: {
@@ -811,6 +822,7 @@ const csdown = {
             }
             let playinfo = storage0.getMyVar('playinfo');
             let vod = playinfo.vodInfo;
+            setPageTitle(vod.vod_name);
             d.push({
                 title: vod.vod_name + '\n' + ('‘‘’’演员：' + vod.vod_actor + '\n国家：' + vod.vod_area).small(),
                 desc: '类型：' + vod.videoTag.join(' ') + '\n' + ('‘‘’’更新状态：' + vod.new_continue + '  ' + vod.vod_year),
@@ -851,7 +863,7 @@ const csdown = {
             d.push({
                 title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
                 url: $('#noLoading#').lazyRule(() => {
-                    return $.require("csdown?rule=瓜子影视").shsort();
+                    return $.require("csdown").shsort();
                 }),
                 col_type: 'text_center_1',
                 extra: {
@@ -876,7 +888,7 @@ const csdown = {
                             return 'select://' + JSON.stringify(Line);
                         })
                     }],
-                    lineVisible:false,
+                    lineVisible: false,
                 }
             })
             try {
@@ -899,7 +911,7 @@ const csdown = {
                     d.push({
                         title: data.title,
                         url: $().lazyRule((id, vurl_id) => {
-                            return $.require("csdown?rule=瓜子影视").jiexi(id, vurl_id)
+                            return $.require("csdown").jiexi(id, vurl_id)
                         }, id, data.id),
                         col_type: col,
                         extra: {
@@ -939,7 +951,7 @@ const csdown = {
                             clearMyVar('Vurl')
                             putMyVar('vod_id_1', MY_PARAMS.vod_id)
                         }
-                        $.require("csdown?rule=瓜子影视").videoerji();
+                        $.require("csdown").videoerji();
                     }),
                     col_type: 'movie_3',
                     extra: {
@@ -956,139 +968,213 @@ const csdown = {
     search: function() {
         var d = this.d;
         var d_ = this.d_;
-        //try {
-        d_.push({
-            title: '',
-            col_type: 'rich_text',
-        })
-        d_.push({   
-            title: "搜索 ",
-            url: $.toString(() => {
-                putMyVar('keyword', input)
-                refreshPage(false)
-                return "hiker://empty"
-            }),
-               desc: "请输入搜索关键词",
-               col_type: "input",
-            extra: {
-                defaultValue: getMyVar('keyword', ''),
-                pageTitle: '搜索结果'
-            }
-        })
-        if (getMyVar('a', '') == '') {
-            this.host_url()
-        }
-        if (!storage0.getItem('search_order_list')) {
-            let search_order_list = [{
-                "name": "全部",
-                "t_id": 0
-            }, {
-                "name": "电影",
-                "t_id": 1
-            }, {
-                "name": "电视剧",
-                "t_id": 2
-            }, {
-                "name": "综艺",
-                "t_id": 3
-            }, {
-                "name": "动漫",
-                "t_id": 4
-            }, {
-                "name": "短剧",
-                "t_id": 64
-            }];
-            storage0.setItem('search_order_list', search_order_list);
-        }
-        let search_order_list = storage0.getItem('search_order_list');
-        putMyVar('search_order_index', search_order_list[0].t_id);
-        let search_order = getMyVar('search_order', getMyVar('search_order_index'));
-        search_order_list.forEach((data, index) => {
+        let pg = MY_PAGE;
+        if (MY_PAGE == 1) {
             d_.push({
-                title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
-                url: $('#noLoading#').lazyRule((n, id, name) => {
-                    return $.require("csdown?rule=瓜子影视").search_order(id);
-                }, 'search_order', data.t_id, data.name),
-                col_type: 'scroll_button',
-                extra: {
-                    backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
-                    id: 'search_cate_' + index,
-                }
+                title: '',
+                col_type: 'rich_text',
             })
-        })
-        d_.push({
-            col_type: 'blank_block',
-            extra: {
-                id: 'search_cate_blank',
-            }
-        })
-        if (!storage0.getItem('findOrder_list')) {
-            let findOrder_list = this.post('/App/Index/findOrder');
-            storage0.setItem('findOrder_list', findOrder_list);
-        }
-        let findOrder_list = storage0.getItem('findOrder_list');
-        putMyVar('findOrder_index', findOrder_list[0].order_val);
-        let findOrder = getMyVar('findOrder', getMyVar('findOrder_index'));
-        findOrder_list.forEach(data => {
-            d_.push({
-                title: findOrder == data.order_val ? this.strong(data.order_key, 'ff6699') : data.order_key,
-                url: $('#noLoading#').lazyRule((n, id, name) => {
-                    putMyVar(n, id);
-                    refreshPage(false);
-                    return 'hiker://empty';
-                }, 'findOrder', data.order_val, data.order_key),
-                col_type: 'scroll_button',
-                extra: {
-                    backgroundColor: findOrder == data.order_val ? "#20FA7298" : "",
-                }
-            })
-        })
-        d_.push({
-            img: "http://123.56.105.145/weisyr/img/Loading1.gif",
-            url: "hiker://empty",
-            col_type: "pic_1_full",
-            extra: {
-                id: "loading_"
-            }
-        });
-        setPreResult(d_)
-        d.push({
-            col_type: 'blank_block',
-            extra: {
-                id: 'search_blank'
-            }
-        })
-        let body = JSON.stringify({
-            'keywords': getMyVar('keyword'),
-            'order_val': findOrder,
-        })
-        let list = this.post('/App/Index/findMoreVod', body).list;
-        list.forEach(data => {
-            d.push({
-                title: data.vod_name + '\n““””' + ('上映时间：' + data.vod_year + '\n地区：' + data.vod_area).small(),
-                desc: '评分：' + data.vod_scroe + '\n更新状态：' + data.new_continue + '\n演员：' + data.vod_actor,
-                img: data.vod_pic,
-                url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown?rule=瓜子影视").videoerji();
+            d_.push({   
+                title: "搜索 ",
+                url: $.toString(() => {
+                    putMyVar('keyword', input)
+                    refreshPage(false)
+                    return "hiker://empty"
                 }),
-                col_type: 'movie_1_vertical_pic',
+                   desc: "请输入搜索关键词",
+                   col_type: "input",
                 extra: {
-                    vod_id: data.vod_id,
-                    vod_name: data.vod_name,
-                    lineVisible: false,
-                    cls: 'search_',
-                    t_id: data.t_id,
+                    defaultValue: getMyVar('keyword', ''),
+                    pageTitle: '搜索结果'
                 }
             })
-        })
-        /*
-        } catch (e) {
-            log(e.message)
+            if (getMyVar('a', '') == '') {
+                this.host_url()
+            }
+            let search_1 = [{
+                title: '视频&小说&漫画',
+                id: '1&2&3'
+            }];
+            this.Cate(search_1, 'search_1', d_, 'text_3');
+            let search_cate_1 = getMyVar('search_1', '1');
+            if (search_cate_1 == '1') {
+                if (!storage0.getItem('search_order_list')) {
+                    let search_order_list = [{
+                        "name": "全部",
+                        "t_id": 0
+                    }, {
+                        "name": "电影",
+                        "t_id": 1
+                    }, {
+                        "name": "电视剧",
+                        "t_id": 2
+                    }, {
+                        "name": "综艺",
+                        "t_id": 3
+                    }, {
+                        "name": "动漫",
+                        "t_id": 4
+                    }, {
+                        "name": "短剧",
+                        "t_id": 64
+                    }];
+                    storage0.setItem('search_order_list', search_order_list);
+                }
+                let search_order_list = storage0.getItem('search_order_list');
+                putMyVar('search_order_index', search_order_list[0].t_id);
+                let search_order = getMyVar('search_order', getMyVar('search_order_index'));
+                search_order_list.forEach((data, index) => {
+                    d_.push({
+                        title: search_order == data.t_id ? this.strong(data.name, 'ff6699') : data.name,
+                        url: $('#noLoading#').lazyRule((n, id, name) => {
+                            return $.require("csdown").search_order(id);
+                        }, 'search_order', data.t_id, data.name),
+                        col_type: 'scroll_button',
+                        extra: {
+                            backgroundColor: search_order == data.t_id ? "#20FA7298" : "",
+                            id: 'search_cate_' + index,
+                        }
+                    })
+                })
+                d_.push({
+                    col_type: 'blank_block',
+                    extra: {
+                        id: 'search_cate_blank',
+                    }
+                })
+                if (!storage0.getItem('findOrder_list')) {
+                    let findOrder_list = this.post('/App/Index/findOrder');
+                    storage0.setItem('findOrder_list', findOrder_list);
+                }
+                let findOrder_list = storage0.getItem('findOrder_list');
+                putMyVar('findOrder_index', findOrder_list[0].order_val);
+                let findOrder = getMyVar('findOrder', getMyVar('findOrder_index'));
+                findOrder_list.forEach(data => {
+                    d_.push({
+                        title: findOrder == data.order_val ? this.strong(data.order_key, 'ff6699') : data.order_key,
+                        url: $('#noLoading#').lazyRule((n, id, name) => {
+                            putMyVar(n, id);
+                            refreshPage(false);
+                            return 'hiker://empty';
+                        }, 'findOrder', data.order_val, data.order_key),
+                        col_type: 'scroll_button',
+                        extra: {
+                            backgroundColor: findOrder == data.order_val ? "#20FA7298" : "",
+                        }
+                    })
+                })
+                d_.push({
+                    img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                    url: "hiker://empty",
+                    col_type: "pic_1_full",
+                    extra: {
+                        id: "loading_"
+                    }
+                });
+                setPreResult(d_)
+                d.push({
+                    col_type: 'blank_block',
+                    extra: {
+                        id: 'search_blank'
+                    }
+                })
+                let body = JSON.stringify({
+                    'keywords': getMyVar('keyword'),
+                    'order_val': findOrder,
+                })
+                let list = this.post('/App/Index/findMoreVod', body).list;
+                list.forEach(data => {
+                    d.push({
+                        title: data.vod_name + '\n““””' + ('上映时间：' + data.vod_year + '\n地区：' + data.vod_area).small(),
+                        desc: '评分：' + data.vod_scroe + '\n更新状态：' + data.new_continue + '\n演员：' + data.vod_actor,
+                        img: data.vod_pic,
+                        url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                            $.require("csdown").videoerji();
+                        }),
+                        col_type: 'movie_1_vertical_pic',
+                        extra: {
+                            vod_id: data.vod_id,
+                            vod_name: data.vod_name,
+                            lineVisible: false,
+                            cls: 'search_',
+                            t_id: data.t_id,
+                        }
+                    })
+                })
+                deleteItem("loading_");
+                setResult(d)
+                storage0.putMyVar('search_find', findItemsByCls('search_'));
+            }
+        };
+        let search_cate_1 = getMyVar('search_1', '1');
+        if (search_cate_1 == '2') {
+            if (MY_PAGE == 1) {
+                d_.push({
+                    img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                    url: "hiker://empty",
+                    col_type: "pic_1_full",
+                    extra: {
+                        id: "loading_"
+                    }
+                });
+                setPreResult(d_);
+            }
+            let search_novel = this.post('/ant_read/book/search', JSON.stringify({
+                "page_num": pg + '',
+                "keyword": getMyVar('keyword')
+            })).list;
+            search_novel.forEach(data => {
+                d.push({
+                    title: data.name,
+                    desc: data.total_chapter + '章',
+                    img: data.cover,
+                    url: $('hiker://empty?id=' + data.book_id + '&#immersiveTheme##autoCache#').rule(() => {
+                        $.require('csdown').novelerji();
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        novel_id: data.book_id,
+                        novel_name: data.name,
+                        novel_author: data.author,
+                    }
+                })
+            })
+            deleteItem('loading_');
+            setResult(d)
+        } else if (search_cate_1 == '3') {
+            if (MY_PAGE == 1) {
+                d_.push({
+                    img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                    url: "hiker://empty",
+                    col_type: "pic_1_full",
+                    extra: {
+                        id: "loading_"
+                    }
+                });
+                setPreResult(d_);
+            }
+            let search_comic = this.post('/ant_read/comic/search', JSON.stringify({
+                "page_num": pg + '',
+                "keyword": getMyVar('keyword')
+            })).list;
+            search_comic.forEach(data => {
+                d.push({
+                    title: data.name,
+                    desc: '共' + data.total_chapters + '话',
+                    img: data.cover,
+                    url: $('hiker://empty?id=' + data.comic_id + '&type=漫画&#immersiveTheme##autoCache#').rule(() => {
+                        $.require('csdown').comicerji();
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        comic_id: data.comic_id,
+                        comic_name: data.name,
+                    }
+                })
+            })
+            deleteItem('loading_');
+            setResult(d)
         }
-        */
-        deleteItem("loading_");
-        setResult(d)
-        storage0.putMyVar('search_find', findItemsByCls('search_'));
     },
     search_order: function(id) {
         try {
@@ -1130,7 +1216,7 @@ const csdown = {
     cate: function() {
         var d = this.d;
         var d_ = this.d_;
-        var pg = getParam('page');
+        var pg = MY_PAGE;
         try {
             if (MY_PAGE == 1) {
                 if (!storage0.getItem('indexPid', '')) {
@@ -1194,7 +1280,7 @@ const csdown = {
                     title: this.color('更多分类'),
                     img: 'hiker://images/icon_right5',
                     url: $('hiker://empty?page=fypage&#gameTheme#').rule(() => {
-                        $.require("csdown?rule=瓜子影视").cate_more()
+                        $.require("csdown").cate_more()
                     }),
                     col_type: 'text_icon',
                     extra: {
@@ -1218,7 +1304,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require("csdown?rule=瓜子影视").cate_erji_1()
+                            $.require("csdown").cate_erji_1()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1231,7 +1317,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_douban_score,
                             img: data.c_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require("csdown?rule=瓜子影视").videoerji();
+                                $.require("csdown").videoerji();
                             }),
                             col_type: 'movie_2',
                             extra: {
@@ -1246,7 +1332,7 @@ const csdown = {
                         title: this.color(item.type),
                         img: 'hiker://images/icon_right5',
                         url: $('hiker://empty?#gameTheme#').rule(() => {
-                            $.require("csdown?rule=瓜子影视").cate_erji_2()
+                            $.require("csdown").cate_erji_2()
                         }),
                         col_type: 'text_icon',
                         extra: {
@@ -1261,7 +1347,7 @@ const csdown = {
                             desc: data.new_continue + '  ' + data.vod_scroe,
                             img: data.vod_pic,
                             url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                $.require("csdown?rule=瓜子影视").videoerji();
+                                $.require("csdown").videoerji();
                             }),
                             col_type: 'movie_3',
                             extra: {
@@ -1280,7 +1366,7 @@ const csdown = {
         var d = this.d;
         var d_ = this.d_;
         let id = MY_PARAMS.t_id;
-        let pg = getParam('page');
+        let pg = MY_PAGE;
         let cate_t_id_list = storage0.getMyVar('cate_t_id_' + id);
         let fliter = ['column', 'area', 'year', 'sort'];
         if (MY_PAGE == 1) {
@@ -1341,7 +1427,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown?rule=瓜子影视").videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1379,7 +1465,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_douban_score,
                 img: data.c_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown?rule=瓜子影视").videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_2',
                 extra: {
@@ -1418,7 +1504,7 @@ const csdown = {
                 desc: data.new_continue + '  ' + data.vod_scroe,
                 img: data.vod_pic,
                 url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                    $.require("csdown?rule=瓜子影视").videoerji();
+                    $.require("csdown").videoerji();
                 }),
                 col_type: 'movie_3',
                 extra: {
@@ -1433,7 +1519,7 @@ const csdown = {
     microvod: function() {
         var d = this.d;
         var d_ = this.d_;
-        var pg = getParam('page');
+        var pg = MY_PAGE;
         let microvod;
         try {
             if (MY_PAGE == 1) {
@@ -1478,7 +1564,12 @@ const csdown = {
             }
             microvod = getMyVar('microvod', getMyVar('microvod_index'));
             if (!storage0.getMyVar('microvod_' + microvod + pg)) {
-                let microvod_body = '{"pageSize":"20","pid":"' + microvod + '","page":"' + pg + '"}';
+                let microvod_body = JSON.stringify({
+                    "micro_type": microvod == getMyVar('microvod_index') ? "1" : '2',
+                    "pageSize": "20",
+                    "pid": microvod,
+                    "page": pg + '',
+                });
                 let microvod_list = this.post('/App/Resource/Vod/microVodList', microvod_body).list;
                 storage0.putMyVar('microvod_' + microvod + pg, microvod_list)
             }
@@ -1487,9 +1578,9 @@ const csdown = {
                 d.push({
                     title: data.name,
                     desc: '““””' + this.addressTag($('hiker://empty?#immersiveTheme#').b64().rule(() => {
-                        $.require("csdown?rule=瓜子影视").videoerji();
+                        $.require("csdown").videoerji();
                     }), '点此观看全集') + '\n' + data.detail_info,
-                    img: 'https://hongniu.ewytek.com/i/2025/08/29/1000069041.png',
+                    img: data.pic_url.replace('jjawa.com', '67c6c7a.com'),
                     //img:data.pic_url,
                     url: data.default_play_url,
                     col_type: 'movie_1_vertical_pic',
@@ -1548,6 +1639,720 @@ const csdown = {
             refreshPage(false)
         }
         return 'hiker://empty';
+    },
+    novel: function() {
+        var d = this.d;
+        var d_ = this.d_;
+        var pg = MY_PAGE;
+        let novel;
+        try {
+            if (MY_PAGE == 1) {
+                if (!storage0.getMyVar('novel_' + pg)) {
+                    d_.push({
+                        col_type: 'blank_block',
+                        extra: {
+                            id: 'blank_3',
+                        }
+                    }, {
+                        img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                        url: "hiker://empty",
+                        col_type: "pic_1_full",
+                        extra: {
+                            id: "loading_"
+                        }
+                    });
+                    setPreResult(d_)
+                    if (!storage0.getMyVar('read_index')) {
+                        let read_index = this.post('/ant_read/top-menu-icon/index').list;
+                        storage0.putMyVar('read_index', read_index)
+                    };
+                }
+                let recommend_id_list = storage0.getMyVar('read_index')[0].recommend_id_list.join(',');
+                if (!storage0.getMyVar('novel_1')) {
+                    let novel_body = JSON.stringify({
+                        "recommend_id": recommend_id_list,
+                        "limit": "20",
+                        "page": pg + '',
+                    });
+                    let novel_list = this.post('/ant_read/book-channel-list/label-new', novel_body);
+                    storage0.putMyVar('novel_1', novel_list)
+                }
+                let novel_list = storage0.getMyVar('novel_1').label;
+                novel_list.forEach(data => {
+                    d.push({
+                        title: this.color(data.label),
+                        img: 'hiker://images/icon_right5',
+                        url: $('hiker://empty?page=fypage&#gameTheme#&#noHistory#').rule(() => {
+                            $.require('csdown').novel_more()
+                        }),
+                        col_type: 'text_icon',
+                        extra: {
+                            recommend_id: data.recommend_id,
+                            label: data.label,
+                        }
+                    })
+                    data.list.forEach(data => {
+                        d.push({
+                            title: data.name,
+                            desc: data.total_chapters + '章',
+                            img: data.cover,
+                            url: $('hiker://empty?id=' + data.book_id + '&#immersiveTheme##autoCache#').rule(() => {
+                                $.require('csdown').novelerji();
+                            }),
+                            col_type: 'movie_3',
+                            extra: {
+                                novel_id: data.book_id,
+                                novel_name: data.name,
+                                novel_author: data.author,
+                            }
+                        })
+                    })
+                })
+            } else {
+                if (!storage0.getMyVar('novel_' + pg)) {
+                    let novel_body = JSON.stringify({
+                        "recommend_id": "60",
+                        "limit": "20",
+                        "page": pg + '',
+                        "position": "1",
+                        "icon_type": "1"
+                    });
+                    let novel_list = this.post('/ant_read/top-recommend/book-comic-list', novel_body);
+                    storage0.putMyVar('novel_' + pg, novel_list)
+                }
+                let novel_list = storage0.getMyVar('novel_' + pg).list;
+                novel_list.forEach(data => {
+                    d.push({
+                        title: data.name,
+                        desc: data.total_chapters + '章',
+                        img: data.cover,
+                        url: $('hiker://empty?id=' + data.book_id + '&#immersiveTheme##autoCache#').rule(() => {
+                            $.require('csdown').novelerji();
+                        }),
+                        col_type: 'movie_3',
+                        extra: {
+                            novel_id: data.book_id,
+                            novel_name: data.name,
+                            novel_author: data.author,
+                        }
+                    })
+                })
+            }
+        } catch (e) {
+            log(e.message)
+        }
+    },
+    novel_more: function() {
+        var d = this.d;
+        var d_ = this.d_;
+        let id = MY_PARAMS.recommend_id;
+        let label = MY_PARAMS.label;
+        let pg = MY_PAGE;
+        if (MY_PAGE == 1) {
+            d_.push({
+                title: '',
+                url: 'hiker://empty',
+                col_type: 'rich_text',
+            })
+            d_.push({
+                title: this.strong(label, 'ff6699'),
+                url: 'hiker://empty',
+                col_type: 'text_center_1',
+                extra: {
+                    lineVisible: false,
+                }
+            })
+            d_.push({
+                img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                url: "hiker://empty",
+                col_type: "pic_1_full",
+                extra: {
+                    id: "loading_"
+                }
+            });
+            setPreResult(d_)
+        }
+        let recommend = this.post('/ant_read/book/recommend', JSON.stringify({
+            "recommend_id": id,
+            "page_num": pg + '',
+            "page_size": "20"
+        })).list.list;
+        recommend.forEach(data => {
+            d.push({
+                title: data.name,
+                desc: data.total_chapter + '章',
+                img: data.cover,
+                url: $('hiker://empty?id=' + data.book_id + '&#immersiveTheme##autoCache#').rule(() => {
+                    $.require('csdown').novelerji();
+                }),
+                col_type: 'movie_3',
+                extra: {
+                    novel_id: data.book_id,
+                    novel_name: data.name,
+                    novel_author: data.author,
+                }
+            })
+        })
+        deleteItem('loading_');
+        setResult(d)
+    },
+    novelerji: function() {
+        var d = this.d;
+        let id = MY_PARAMS.novel_id;
+        let pg = +getMyVar('gzapp_page_' + id, '0') + 1;
+        setPageTitle(MY_PARAMS.novel_name);
+        try {
+            if (!storage0.getMyVar('bookinfo' + id)) {
+                let request_key = JSON.stringify({
+                    "book_id": id,
+                })
+                let bookinfo = this.post('/ant_read/novel/info', request_key);
+                storage0.putMyVar('bookinfo' + id, bookinfo);
+            }
+            let bookinfo = storage0.getMyVar('bookinfo' + id);
+            if (!storage0.getMyVar('novel_chapter' + id + pg)) {
+                let novel_chapter = this.post('/ant_read/chapter/catalog', JSON.stringify({
+                    "orderby": "1",
+                    "book_id": id,
+                    "page": pg + '',
+                    "position": "0"
+                }));
+                storage0.putMyVar('novel_chapter' + id + pg, novel_chapter);
+            }
+            let novel_chapter = storage0.getMyVar('novel_chapter' + id + pg);
+            let book = bookinfo.book;
+            setPageTitle(book.name);
+            d.push({
+                title: book.name + '\n' + ('‘‘’’作者：' + book.author + '\n字数：' + book.display_label).small(),
+                desc: '状态：' + book.book_status + book.last_chapter + '\n' + ('‘‘’’更新时间：' + book.last_chapter_time),
+                img: book.cover,
+                url: $('hiker://empty?#gameTheme#').rule((pic, name, actor, label, new_continue, time, description) => {
+                    var d = []
+                    d.push({
+                        img: pic,
+                        url: pic + '#.jpg#',
+                        col_type: 'pic_1_full'
+                    }, {
+                        title: '小说名：' + name,
+                        col_type: 'rich_text'
+                    }, {
+                        title: '作者：' + actor,
+                        col_type: 'rich_text'
+                    }, {
+                        title: '字数：' + label,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '更新状态：' + new_continue,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '最后更新：' + time,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '简介：' + description,
+                        col_type: 'rich_text',
+                    }, )
+                    setResult(d)
+                }, book.cover, book.name, book.author, book.display_label, book.book_status + book.last_chapter, book.last_chapter_time, book.description),
+                col_type: 'movie_1_vertical_pic_blur',
+            })
+            this.setDesc(d, book.description);
+            d.push({
+                title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
+                url: $('#noLoading#').lazyRule(() => {
+                    return $.require("csdown").shsort();
+                }),
+                col_type: 'text_center_1',
+                extra: {
+                    id: '排序',
+                    lineVisible: false,
+                }
+            })
+            let 分页链接 = [];
+            let 分页名 = [];
+            let pageid = +getMyVar('gzapp_page_' + id, '0');
+            let 分页页码 = pageid + 1;
+            for (let i = 0; i < novel_chapter.total_page; i++) {
+                分页链接.push($("#noLoading#").lazyRule((pageurl, nowid, newid) => {
+                    if (nowid != newid) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return 'hiker://empty'
+                }, "gzapp_page_" + id, pageid + '', i + ''))
+                let start = i * 20 + 1;
+                let end = i * 20 + 20;
+                let title = start + ' - ' + end;
+                分页名.push(pageid == i ? '““””<span style="color: #3399cc">' + title : title)
+            }
+            d.push({
+                title: '尾页',
+                url: $('#noLoading#').lazyRule((pageurl, nowid, newid) => {
+                    if (nowid != newid) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                }, "gzapp_page_" + id, pageid + '', novel_chapter.total_page - 1 + ''),
+                col_type: 'text_4',
+            })
+            d.push({
+                title: 分页名[pageid],
+                url: $(分页名, 2).select((分页名, 分页链接) => {
+                    return 分页链接[分页名.indexOf(input)];
+                }, 分页名, 分页链接),
+                col_type: 'text_2',
+            })
+            d.push({
+                title: '下页',
+                url: $('#noLoading#').lazyRule((pageurl, nowid, newid, total_page) => {
+                    if (nowid != newid && +newid < total_page) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                }, "gzapp_page_" + id, pageid + '', pageid + 1 + '', novel_chapter.total_page),
+                col_type: 'text_4',
+            })
+            try {
+                let urls = novel_chapter.chapter_list;
+                if (getMyVar('shsort', '0') == '1') {
+                    urls.reverse()
+                }
+                if (urls && urls.length == 0) {
+                    d.push({
+                        title: '小说下架或未上传，请选择其他小说观看',
+                        url: 'hiker://empty',
+                        col_type: 'text_center_1',
+                        extra: {
+                            lineVisible: false
+                        }
+                    })
+                }
+                let col = urls[0].chapter_title.length > 5 ? 'text_1' : 'text_2';
+                urls.forEach(data => {
+                    d.push({
+                        title: data.chapter_title,
+                        url: $('hiker://empty?chapter_id=' + data.chapter_id + '&#autoPage#&#readTheme#').rule(() => {
+                            $.require("csdown").novel_jx();
+                        }),
+                        col_type: col,
+                        extra: {
+                            cls: '选集_',
+                            book_id: id,
+                            chapter_id: data.chapter_id,
+                        }
+                    })
+                })
+            } catch (e) {
+                log(e.message)
+            }
+            d.push({
+                col_type: 'blank_block',
+                extra: {
+                    id: 'blank',
+                }
+            }, {
+                title: '<b><span style="color: #ff847c">推荐</span></b>',
+                img: 'http://123.56.105.145/tubiao/messy/9.svg',
+                url: $('#noLoading#').lazyRule(() => {
+                    refreshPage(false)
+                    return 'hiker://empty'
+                }),
+                col_type: 'text_icon',
+                extra: {
+
+                }
+            })
+            let label = bookinfo.label[0].list;
+            label.forEach(data => {
+                d.push({
+                    title: data.name,
+                    desc: data.total_chapters + '章',
+                    img: data.cover,
+                    url: $('hiker://empty?id=' + data.book_id + '&#immersiveTheme##autoCache#').rule(() => {
+                        $.require('csdown').novelerji();
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        novel_id: data.book_id,
+                        novel_name: data.name,
+                        novel_author: data.author,
+                    }
+                })
+            })
+        } catch (e) {
+            log(e.message)
+        }
+        setResult(d)
+    },
+    novel_jx: function() {
+        var d = this.d;
+        let id = MY_PARAMS.book_id;
+        let chapter_id = MY_PARAMS.chapter_id;
+        let data = this.post('/ant_read/chapter/text', JSON.stringify({
+            "book_id": id,
+            "chapter_id": chapter_id
+        }))
+        d.push({
+            title: '<h3 style="text-align:center;">' + data.chapter_title,
+            url: 'hiker://empty',
+            col_type: 'rich_text',
+            extra: {
+                lineVisible: false
+            }
+        }, {
+            title: '&emsp;  ' + data.content.replace(/\n/g, '<br>&emsp;  '),
+            col_type: 'rich_text',
+        })
+        setResult(d)
+    },
+    comic: function() {
+        var d = this.d;
+        var d_ = this.d_;
+        var pg = MY_PAGE;
+        let comic;
+        try {
+            if (MY_PAGE == 1) {
+                if (!storage0.getMyVar('comic_' + pg)) {
+                    d_.push({
+                        col_type: 'blank_block',
+                        extra: {
+                            id: 'blank_3',
+                        }
+                    }, {
+                        img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                        url: "hiker://empty",
+                        col_type: "pic_1_full",
+                        extra: {
+                            id: "loading_"
+                        }
+                    });
+                    setPreResult(d_)
+                    if (!storage0.getMyVar('read_index')) {
+                        let read_index = this.post('/ant_read/top-menu-icon/index').list;
+                        storage0.putMyVar('read_index', read_index)
+                    };
+                }
+                let recommend_id_list = storage0.getMyVar('read_index')[1].recommend_id_list.join(',');
+                if (!storage0.getMyVar('comic_1')) {
+                    let comic_body = JSON.stringify({
+                        "recommend_id": recommend_id_list,
+                        "limit": "20",
+                        "page": pg + '',
+                    });
+                    let comic_list = this.post('/ant_read/comic-channel-list/label-new', comic_body);
+                    storage0.putMyVar('comic_1', comic_list)
+                }
+                let comic_list = storage0.getMyVar('comic_1').label;
+                comic_list.forEach(data => {
+                    d.push({
+                        title: this.color(data.label),
+                        img: 'hiker://images/icon_right5',
+                        url: $('hiker://empty?page=fypage&#gameTheme#&#noHistory#').rule(() => {
+                            $.require('csdown').comic_more()
+                        }),
+                        col_type: 'text_icon',
+                        extra: {
+                            recommend_id: data.recommend_id,
+                            label: data.label,
+                        }
+                    })
+                    data.list.forEach(data => {
+                        d.push({
+                            title: data.name,
+                            desc: '共' + data.total_chapters + '话',
+                            img: data.vertical_cover,
+                            url: $('hiker://empty?id=' + data.comic_id + '&type=漫画&#immersiveTheme##autoCache#').rule(() => {
+                                $.require('csdown').comicerji();
+                            }),
+                            col_type: 'movie_3',
+                            extra: {
+                                comic_id: data.comic_id,
+                                comic_name: data.name,
+                            }
+                        })
+                    })
+                })
+            } else {
+                if (!storage0.getMyVar('comic_' + pg)) {
+                    let comic_body = JSON.stringify({
+                        "recommend_id": "57",
+                        "limit": "20",
+                        "page": pg + '',
+                        "position": "2",
+                        "icon_type": "2"
+                    });
+                    let comic_list = this.post('/ant_read/top-recommend/book-comic-list', comic_body);
+                    storage0.putMyVar('comic_' + pg, comic_list)
+                }
+                let comic_list = storage0.getMyVar('comic_' + pg).list;
+                comic_list.forEach(data => {
+                    d.push({
+                        title: data.name,
+                        desc: '共' + data.total_chapters + '话',
+                        img: data.vertical_cover,
+                        url: $('hiker://empty?id=' + data.comic_id + '&type=漫画&#immersiveTheme##autoCache#').rule(() => {
+                            $.require('csdown').comicerji();
+                        }),
+                        col_type: 'movie_3',
+                        extra: {
+                            comic_id: data.comic_id,
+                            comic_name: data.name,
+                        }
+                    })
+                })
+            }
+        } catch (e) {
+            log(e.message)
+        }
+    },
+    comicerji: function() {
+        var d = this.d;
+        let id = MY_PARAMS.comic_id;
+        let pg = +getMyVar('gzapp_page_comic_' + id, '0') + 1;
+        setPageTitle(MY_PARAMS.comic_name);
+        try {
+            if (!storage0.getMyVar('comicinfo' + id)) {
+                let request_key = JSON.stringify({
+                    "comic_id": id,
+                })
+                let comicinfo = this.post('/ant_read/comic/info', request_key);
+                storage0.putMyVar('comicinfo' + id, comicinfo);
+            }
+            let comicinfo = storage0.getMyVar('comicinfo' + id);
+            if (!storage0.getMyVar('comic_chapter' + id + pg)) {
+                let comic_chapter = this.post('/ant_read/comic/catalog', JSON.stringify({
+                    "orderby": "1",
+                    "comic_id": id,
+                    "page": pg + '',
+                    "position": "0"
+                }));
+                storage0.putMyVar('comic_chapter' + id + pg, comic_chapter);
+            }
+            let comic_chapter = storage0.getMyVar('comic_chapter' + id + pg);
+            let comic = comicinfo.comic;
+            setPageTitle(comic.name);
+            d.push({
+                title: comic.name + '\n' + ('‘‘’’作者：' + comic.author + '\n更新：' + comic.flag).small(),
+                desc: '状态：' + comic.finished + ' ' + comic.last_chapter + '\n' + ('‘‘’’更新时间：' + comic.last_chapter_time),
+                img: comic.cover,
+                url: $('hiker://empty?#gameTheme#').rule((pic, name, actor, label, new_continue, time, description) => {
+                    var d = []
+                    d.push({
+                        img: pic,
+                        url: pic + '#.jpg#',
+                        col_type: 'pic_1_full'
+                    }, {
+                        title: '漫画名：' + name,
+                        col_type: 'rich_text'
+                    }, {
+                        title: '作者：' + actor,
+                        col_type: 'rich_text'
+                    }, {
+                        title: '字数：' + label,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '更新状态：' + new_continue,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '最后更新：' + time,
+                        col_type: 'rich_text',
+                    }, {
+                        title: '简介：' + description,
+                        col_type: 'rich_text',
+                    }, )
+                    setResult(d)
+                }, comic.cover, comic.name, comic.author, comic.flag, comic.finished + comic.last_chapter, comic.last_chapter_time, comic.description),
+                col_type: 'movie_1_vertical_pic_blur',
+            })
+            this.setDesc(d, comic.description);
+            d.push({
+                title: (getMyVar('shsort', '0') == '1') ? '““””<b><span style="color: #FF0000">逆序</span></b>' : '““””<b><span style="color: #1aad19">正序</span></b>',
+                url: $('#noLoading#').lazyRule(() => {
+                    return $.require("csdown").shsort();
+                }),
+                col_type: 'text_center_1',
+                extra: {
+                    id: '排序',
+                    lineVisible: false,
+                }
+            })
+            let 分页链接 = [];
+            let 分页名 = [];
+            let pageid = +getMyVar('gzapp_page_comic_' + id, '0');
+            let 分页页码 = pageid + 1;
+            for (let i = 0; i < comic_chapter.total_page; i++) {
+                分页链接.push($("#noLoading#").lazyRule((pageurl, nowid, newid) => {
+                    if (nowid != newid) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return 'hiker://empty'
+                }, "gzapp_page_comic_" + id, pageid + '', i + ''))
+                let start = i * 20 + 1;
+                let end = i * 20 + 20;
+                let title = start + ' - ' + end;
+                分页名.push(pageid == i ? '““””<span style="color: #3399cc">' + title : title)
+            }
+            d.push({
+                title: '尾页',
+                url: $('#noLoading#').lazyRule((pageurl, nowid, newid) => {
+                    if (nowid != newid) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                }, "gzapp_page_comic_" + id, pageid + '', comic_chapter.total_page - 1 + ''),
+                col_type: 'text_4',
+            })
+            d.push({
+                title: 分页名[pageid],
+                url: $(分页名, 2).select((分页名, 分页链接) => {
+                    return 分页链接[分页名.indexOf(input)];
+                }, 分页名, 分页链接),
+                col_type: 'text_2',
+            })
+            d.push({
+                title: '下页',
+                url: $('#noLoading#').lazyRule((pageurl, nowid, newid, total_page) => {
+                    if (nowid != newid && +newid < total_page) {
+                        putMyVar(pageurl, newid);
+                        refreshPage(false);
+                    }
+                    return "hiker://empty";
+                }, "gzapp_page_comic_" + id, pageid + '', pageid + 1 + '', comic_chapter.total_page),
+                col_type: 'text_4',
+            })
+            try {
+                let urls = comic_chapter.chapter_list;
+                if (getMyVar('shsort', '0') == '1') {
+                    urls.reverse()
+                }
+                if (urls && urls.length == 0) {
+                    d.push({
+                        title: '漫画下架或未上传，请选择其他小说观看',
+                        url: 'hiker://empty',
+                        col_type: 'text_center_1',
+                        extra: {
+                            lineVisible: false
+                        }
+                    })
+                }
+                let col = urls[0].chapter_title.length > 5 ? 'text_1' : 'text_2';
+                urls.forEach(data => {
+                    d.push({
+                        title: data.chapter_title,
+                        url: $().lazyRule((comic_id, chapter_id) => {
+                            return $.require("csdown").comic_jx(comic_id, chapter_id);
+                        }, id, data.chapter_id),
+                        col_type: col,
+                        extra: {
+                            cls: '选集_',
+                            comic_id: id,
+                            chapter_id: data.chapter_id,
+                        }
+                    })
+                })
+            } catch (e) {
+                log(e.message)
+            }
+            d.push({
+                col_type: 'blank_block',
+                extra: {
+                    id: 'blank',
+                }
+            }, {
+                title: '<b><span style="color: #ff847c">推荐</span></b>',
+                img: 'http://123.56.105.145/tubiao/messy/9.svg',
+                url: $('#noLoading#').lazyRule(() => {
+                    refreshPage(false)
+                    return 'hiker://empty'
+                }),
+                col_type: 'text_icon',
+                extra: {
+
+                }
+            })
+            let label = comicinfo.label[0].list;
+            label.forEach(data => {
+                d.push({
+                    title: data.name,
+                    img: data.vertical_cover,
+                    url: $('hiker://empty?id=' + data.comic_id + '&type=漫画&#immersiveTheme##autoCache#').rule(() => {
+                        $.require('csdown').comicerji();
+                    }),
+                    col_type: 'movie_3',
+                    extra: {
+                        comic_id: data.comic_id,
+                        comic_name: data.name,
+                    }
+                })
+            })
+        } catch (e) {
+            log(e.message)
+        }
+        setResult(d)
+    },
+    comic_more: function() {
+        var d = this.d;
+        var d_ = this.d_;
+        let id = MY_PARAMS.recommend_id;
+        let label = MY_PARAMS.label;
+        let pg = MY_PAGE;
+        if (MY_PAGE == 1) {
+            d_.push({
+                title: '',
+                url: 'hiker://empty',
+                col_type: 'rich_text',
+            })
+            d_.push({
+                title: this.strong(label, 'ff6699'),
+                url: 'hiker://empty',
+                col_type: 'text_center_1',
+                extra: {
+                    lineVisible: false,
+                }
+            })
+            d_.push({
+                img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                url: "hiker://empty",
+                col_type: "pic_1_full",
+                extra: {
+                    id: "loading_"
+                }
+            });
+            setPreResult(d_)
+        }
+        let recommend = this.post('/ant_read/comic/recommend', JSON.stringify({
+            "recommend_id": id,
+            "page_num": pg + '',
+            "page_size": "20"
+        })).list.list;
+        recommend.forEach(data => {
+            d.push({
+                title: data.name,
+                desc: '共' + data.total_chapters + '话',
+                img: data.vertical_cover,
+                url: $('hiker://empty?id=' + data.comic_id + '&type=漫画&#immersiveTheme##autoCache#').rule(() => {
+                    $.require('csdown').comicerji();
+                }),
+                col_type: 'movie_3',
+                extra: {
+                    comic_id: data.comic_id,
+                    comic_name: data.name,
+                }
+            })
+        })
+        deleteItem('loading_');
+        setResult(d)
+    },
+    comic_jx: function(comic_id, chapter_id) {
+        let image_list = this.post('/ant_read/comic/chapter', JSON.stringify({
+            "comic_id": comic_id + '',
+            "chapter_id": chapter_id + ''
+        })).image_list;
+        let img = image_list.map(data => data.img);
+        return 'pics://' + img.join('&&');
     },
 }
 $.exports = csdown
