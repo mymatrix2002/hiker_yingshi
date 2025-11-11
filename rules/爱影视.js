@@ -1,7 +1,7 @@
 const csdown = {
     d: [],
     author: '流苏',
-    version: '20250919',
+    version: '20251111',
     rely: function(data) {
         return data.match(/\{([\s\S]*)\}/)[0].replace(/\{([\s\S]*)\}/, '$1')
     },
@@ -90,7 +90,7 @@ const csdown = {
             return '‘‘’’<strong><font color=#' + (c || '000000') + '>' + d + '</font></strong>';
         }
         if (!getMyVar('host', '')) {
-            let appurl = fetch('https://aysappto.oss-cn-chengdu.aliyuncs.com/qj2.txt');
+            let appurl = fetch('https://aysappto.oss-cn-chengdu.aliyuncs.com/qj3.txt');
             putMyVar('host', appurl + '/')
         }
 
@@ -132,7 +132,7 @@ const csdown = {
             })
             return d;
         }
-        const de_key = 'sada21321sdq231d';
+        const de_key = 'sda1231sasddad21';
         // 解密函数
         function Decrypt(word) {
             const key = CryptoJS.enc.Utf8.parse(de_key);
@@ -392,6 +392,12 @@ const csdown = {
                 "““声明””:随时可能跑路",
                 "““声明””:不要相信里面的广告，不要去加里面的群",
                 "““声明””：本小程序作者为““" + this.author + "””",
+            ]
+        }, {
+            title: "2025/11/11",
+            records: [
+                "““更新””:更新至APP版本号1.0.8",
+                "““修复””:修复搜索，改为手动输入验证码",
             ]
         }, {
             title: "2025/09/19",
@@ -704,159 +710,164 @@ const csdown = {
                     }
                 })
             }
-            //生成随机uuid
-            function generateUUID() {
-                return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-                    var r = Math.random() * 16 | 0;
-                    var v = c === 'x' ? r : (r & 0x3 | 0x8);
-                    return v.toString(16);
-                });
-            }
-            let uuid = generateUUID();
-            let key = getMyVar('host') + '/api.php/qijiappapi.verify/create?key=' + uuid;
-            let ssyz = (img, type) => {
-                const MAP = {
-                    num: {
-                        'a': '4',
-                        'b': '6',
-                        'd': '0',
-                        'e': '9',
-                        'g': '9',
-                        'i': '1',
-                        'l': '1',
-                        'm': '3',
-                        's': '5',
-                        't': '7',
-                        'o': '0',
-                        'q': '9',
-                        'u': '4',
-                        'z': '2'
-                    },
-                    alpha: {
-                        '4': 'a',
-                        '6': 'b',
-                        '9': 'q',
-                        '1': 'l',
-                        '3': 'm',
-                        '5': 's',
-                        '7': 't',
-                        '0': 'o',
-                        '2': 'z'
+            if (!storage0.getMyVar('search_' + getMyVar('search', '0') + getMyVar('keyword'))) {
+                //生成随机uuid
+                function generateUUID() {
+                    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                        var r = Math.random() * 16 | 0;
+                        var v = c === 'x' ? r : (r & 0x3 | 0x8);
+                        return v.toString(16);
+                    });
+                }
+                let uuid = generateUUID();
+                let key = getMyVar('host') + '/api.php/qijiappapi.verify/create?key=' + uuid;
+                /*
+                let ssyz = (img, type) => {
+                    const MAP = {
+                        num: {
+                            'a': '4',
+                            'b': '6',
+                            'd': '0',
+                            'e': '9',
+                            'g': '9',
+                            'i': '1',
+                            'l': '1',
+                            'm': '3',
+                            's': '5',
+                            't': '7',
+                            'o': '0',
+                            'q': '9',
+                            'u': '4',
+                            'z': '2'
+                        },
+                        alpha: {
+                            '4': 'a',
+                            '6': 'b',
+                            '9': 'q',
+                            '1': 'l',
+                            '3': 'm',
+                            '5': 's',
+                            '7': 't',
+                            '0': 'o',
+                            '2': 'z'
+                        }
+                    };
+
+                    const currentMap = MAP[type] || {};
+
+                    const ocrResult = request('https://api.nn.ci/ocr/b64/text', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: convertBase64Image(img).split(',')[1]
+                    }).split('')
+                    // log(ocrResult)
+                    const result = [];
+                    for (let i = 0; i < ocrResult.length; i++) {
+                        let char = ocrResult[i];
+                        result.push(currentMap[char] || char);
                     }
-                };
-
-                const currentMap = MAP[type] || {};
-
-                const ocrResult = request('https://api.nn.ci/ocr/b64/text', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: convertBase64Image(img).split(',')[1]
-                }).split('')
-                // log(ocrResult)
-                const result = [];
-                for (let i = 0; i < ocrResult.length; i++) {
-                    let char = ocrResult[i];
-                    result.push(currentMap[char] || char);
+                    return result.join('')
                 }
-                return result.join('')
-            }
-            let code = ssyz(key, 'num');
-            let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + code + '&key=' + uuid;
-            let item = post('api.php/qijiappapi.index/searchList', body);
-            if (item.search_list && item.search_list.length > 0) {
-                item.search_list.forEach(data => {
-                    d.push({
-                        title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
-                        desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
-                        img: data.vod_pic,
-                        url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                            $.require("csdown").videoerji()
-                        }),
-                        col_type: 'movie_1_vertical_pic',
-                        extra: {
-                            vod_id: data.vod_id,
-                            vod_name: data.vod_name,
-                            cls: 'search_list',
-                        }
-                    })
-                })
-            }
-            /*
-            d.push({
-                img: key,
-                url: key,
-                col_type: 'pic_1_center',
-                extra: {
-                    cls: 'yzm',
-                }
-            })
-            d.push({
-                col_type: 'blank_block',
-                extra: {
-                    id: 'search_blank'
-                }
-            })
-            d.push({
-                title: "",
-                url: $.toString((pg, uuid) => {
-                    return $('#noLoading#').lazyRule((pg, uuid) => {
-                        eval($.require('csdown').rely($.require('csdown').aes));
-                        let d = [];
-                        deleteItemByCls('yzm');
-                        addItemAfter('search_blank', {
-                            img: "http://123.56.105.145/weisyr/img/Loading1.gif",
-                            url: "hiker://empty",
-                            col_type: "pic_1_full",
+                let code = ssyz(key, 'num');
+                let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + code + '&key=' + uuid;
+                let item = post('api.php/qijiappapi.index/searchList', body);
+                if (item.search_list && item.search_list.length > 0) {
+                    item.search_list.forEach(data => {
+                        d.push({
+                            title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
+                            desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
+                            img: data.vod_pic,
+                            url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                                $.require("csdown").videoerji()
+                            }),
+                            col_type: 'movie_1_vertical_pic',
                             extra: {
-                                id: 'loading_'
+                                vod_id: data.vod_id,
+                                vod_name: data.vod_name,
+                                cls: 'search_list',
                             }
-                        });
-                        try {
-                            let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + getMyVar('yzm') + '&key=' + uuid;
-                            let item = post('api.php/qijiappapi.index/searchList', body);
-                            if (item.search_list && item.search_list.length > 0) {
-                                item.search_list.forEach(data => {
-                                    d.push({
-                                        title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
-                                        desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
-                                        img: data.vod_pic,
-                                        url: $('hiker://empty?#immersiveTheme#').rule(() => {
-                                            $.require("csdown").videoerji()
-                                        }),
-                                        col_type: 'movie_1_vertical_pic',
-                                        extra: {
-                                            vod_id: data.vod_id,
-                                            vod_name: data.vod_name,
-                                            cls: 'search_list',
-                                        }
-                                    })
-                                })
-                                deleteItem('loading_');
-                                deleteItemByCls('search_list');
-                                addItemAfter('search_blank', d);
-                            }
-                        } catch (e) {
-                            toast('验证码错误');
-                            refreshPage(false)
-                        }
-                        return 'hiker://empty'
-                    }, pg, uuid)
-                }, pg, uuid),
-                desc: "请输入验证码",
-                col_type: "input",
-                extra: {
-                    defaultValue: getMyVar('yzm', ''),
-                    onChange: $.toString(() => {
-                        putMyVar('yzm', input)
-                    }),
-                    //titleVisible: false,
-                    cls: 'yzm',
-                    id: 'yzm_input',
+                        })
+                    })
                 }
-            })
-            */
+                */
+                d.push({
+                    img: key,
+                    url: key,
+                    col_type: 'pic_1_center',
+                    extra: {
+                        cls: 'yzm',
+                    }
+                })
+                d.push({
+                    col_type: 'blank_block',
+                    extra: {
+                        id: 'search_blank'
+                    }
+                })
+                d.push({
+                    title: "",
+                    url: $.toString((pg, uuid) => {
+                        return $('#noLoading#').lazyRule((pg, uuid) => {
+                            eval($.require('csdown').rely($.require('csdown').aes));
+                            let d = [];
+                            deleteItemByCls('yzm');
+                            addItemAfter('search_blank', {
+                                img: "http://123.56.105.145/weisyr/img/Loading1.gif",
+                                url: "hiker://empty",
+                                col_type: "pic_1_full",
+                                extra: {
+                                    id: 'loading_'
+                                }
+                            });
+                            try {
+                                let body = 'keywords=' + getMyVar('keyword') + '&type_id=' + getMyVar('search', '0') + '&page=' + pg + '&code=' + getMyVar('yzm') + '&key=' + uuid;
+                                let item = post('api.php/qijiappapi.index/searchList', body);
+                                if (item.search_list && item.search_list.length > 0) {
+                                    item.search_list.forEach(data => {
+                                        d.push({
+                                            title: data.vod_name + '\n' + ('‘‘’’演员：' + data.vod_actor + '\n国家：' + data.vod_area).small(),
+                                            desc: '类型：' + data.vod_class + '\n' + ('‘‘’’更新状态：' + data.vod_remarks),
+                                            img: data.vod_pic,
+                                            url: $('hiker://empty?#immersiveTheme#').rule(() => {
+                                                $.require("csdown").videoerji()
+                                            }),
+                                            col_type: 'movie_1_vertical_pic',
+                                            extra: {
+                                                vod_id: data.vod_id,
+                                                vod_name: data.vod_name,
+                                                cls: 'search_list',
+                                            }
+                                        })
+                                    })
+                                    storage0.putMyVar('search_' + getMyVar('search', '0') + getMyVar('keyword'), d);
+                                    deleteItem('loading_');
+                                    deleteItemByCls('search_list');
+                                    addItemAfter('search_blank', d);
+                                }
+                            } catch (e) {
+                                toast('验证码错误');
+                                refreshPage(false)
+                            }
+                            return 'hiker://empty'
+                        }, pg, uuid)
+                    }, pg, uuid),
+                    desc: "请输入验证码",
+                    col_type: "input",
+                    extra: {
+                        defaultValue: getMyVar('yzm', ''),
+                        onChange: $.toString(() => {
+                            putMyVar('yzm', input)
+                        }),
+                        //titleVisible: false,
+                        cls: 'yzm',
+                        id: 'yzm_input',
+                    }
+                })
+            } else {
+                storage0.getMyVar('search_' + getMyVar('search', '0') + getMyVar('keyword')).forEach(data => d.push(data))
+            }
         } catch (e) {
             log(e.message)
         }
