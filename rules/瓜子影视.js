@@ -2,7 +2,7 @@ const csdown = {
     d: [],
     d_: [],
     author: '流苏',
-    version: 20251008,
+    version: 20251123,
     home: function() {
         var d = this.d;
         var d_ = this.d_;
@@ -396,7 +396,12 @@ const csdown = {
                 "““声明””：不要相信里面的广告",
                 "““声明””：本小程序作者为““" + this.author + "””",
             ]
-        },{
+        }, {
+            title: "2025/11/23",
+            records: [
+                "““修复””：修复视频分类(需要重生)",
+            ]
+        }, {
             title: "2025/10/08",
             records: [
                 "““更新””：主页增加漫画和小说",
@@ -1562,10 +1567,13 @@ const csdown = {
                 }
                 setPreResult(d_)
             }
+            let cate_microvod = storage0.getItem('cate_microvod');
             microvod = getMyVar('microvod', getMyVar('microvod_index'));
             if (!storage0.getMyVar('microvod_' + microvod + pg)) {
+                let cate_microvod_type = cate_microvod.map(data => data.id + '');
+                let microvod_type = cate_microvod_type.map((_, i) => i + 1);
                 let microvod_body = JSON.stringify({
-                    "micro_type": microvod == getMyVar('microvod_index') ? "1" : '2',
+                    "micro_type": microvod_type[+cate_microvod_type.indexOf(microvod + '')],
                     "pageSize": "20",
                     "pid": microvod,
                     "page": pg + '',
@@ -1579,7 +1587,7 @@ const csdown = {
                     title: data.name,
                     desc: '““””' + this.addressTag($('hiker://empty?#immersiveTheme#').b64().rule(() => {
                         $.require("csdown").videoerji();
-                    }), '点此观看全集') + '\n' + data.detail_info,
+                    }), '点此观看全集'),
                     img: data.pic_url.replace('jjawa.com', '67c6c7a.com'),
                     //img:data.pic_url,
                     url: data.default_play_url,
